@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="1.0"
+	xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
+    
+    <persistence-unit name="erws" transaction-type="RESOURCE_LOCAL">
+    	
+	<!--  persistence-unit name="erws" transaction-type="JTA">
+		<jta-data-source>java:/ERMDS</jta-data-source -->
+	
+	    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+		
+		<class>com.fox.it.erws.rest.api.pojos.ConsumingApplicationPOJO</class>
+		<class>com.fox.it.erws.rest.api.pojos.ApplicationRequiredParams</class>
+		<class>com.fox.it.erws.rest.api.pojos.AppControlParamRequiredFields</class>
+		<class>com.fox.it.erws.rest.api.pojos.mtl.Media</class>
+		<class>com.fox.it.erws.rest.api.pojos.mtl.Language</class>
+		<class>com.fox.it.erws.rest.api.pojos.mtl.Territory</class>
+		<class>com.fox.it.erws.rest.api.pojos.ProductList</class>
+		<class>com.fox.it.erws.rest.api.pojos.Answer</class>
+		<class>com.fox.it.erws.rest.api.pojos.RightsCheckSummary</class>
+		<class>com.fox.it.erws.rest.api.pojos.RightsCheckDetail</class>
+		<class>com.fox.it.erws.rest.api.pojos.RightsCheckRestrictionDetail</class>
+		
+		
+ 		<exclude-unlisted-classes>true</exclude-unlisted-classes>			
+		<properties>
+			<property name="eclipselink.weaving" value="static"/> 
+		    <property name="eclipselink.logging.level.sql" value="FINE"/>
+            <property name="eclipselink.logging.parameters" value="true"/>	
+            <!--  property name="eclipselink.profiler" value="PerformanceProfiler.logProfileSummary"/>
+            <property name="eclipselink.profiler" value="PerformanceProfiler.logProfileSummary"/>
+            <property name="eclipselink.profiler" value="PerformanceProfiler.logProfileSummaryByQuery"/>
+            <property name="eclipselink.profiler" value="PerformanceProfiler.logProfileSummaryByClass"/ -->
+            <!--  property name="eclipselink.profiler" value="PerformanceProfiler"/-->
+            
+         	
+         	 <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.driver.OracleDriver"/>
+             <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@FFEUSCNUXDB72.foxinc.com:1521:ERMT1"/>
+             <property name="javax.persistence.jdbc.user" value="erm"/>
+             <property name="javax.persistence.jdbc.password" value="TiK4eRm_3"/>
+
+		</properties>			
+	</persistence-unit>
+</persistence>

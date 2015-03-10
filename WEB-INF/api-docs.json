@@ -1,0 +1,14 @@
+{
+  "apiVersion": "0.2",
+  "swaggerVersion": "1.2",
+  "apis": [
+    {
+      "path": "/Tracy",
+      "description": "Operations about pets"
+    },
+    {
+      "path": "/Michelle",
+      "description": "Operations about user"
+    }
+  ]
+}
