@@ -25,7 +25,7 @@ import com.fox.it.erws.rest.api.model.drc.DRCRightsCheckRequiredResponse;
 import com.fox.it.erws.rest.api.model.drc.DRCRightsRequiredChecker;
 import com.fox.it.erws.rest.api.pojos.Answer;
 import com.fox.it.erws.rest.api.pojos.AppControlParamRequiredFields;
-import com.fox.it.erws.rest.api.pojos.mtl.MTL;
+import com.fox.it.erws.rest.api.pojos.mtl.MLT;
 import com.fox.it.erws.rest.api.processor.DRCRequestProducer;
 import com.fox.it.erws.rest.api.util.ERMTime;
 import com.fox.it.erws.rest.api.validation.ERWSValidator;
@@ -34,7 +34,7 @@ import com.wordnik.swagger.annotations.Api;
 
 @Controller
 @Api(value = "/drc", description = "make a request for access the DRC resource and its service layer with a valid access token")
-public class DRCService<T extends MTL, A extends Answer, R extends DRCResponse<A>> {
+public class DRCService<T extends MLT, A extends Answer, R extends DRCResponse<A>> {
 
 	@Autowired
 	private DRCRequestProducer drcRequestProducer;
@@ -61,9 +61,10 @@ public class DRCService<T extends MTL, A extends Answer, R extends DRCResponse<A
 		
 	}
 	
+	
 	@RequestMapping(value="/ask/required", method=RequestMethod.POST)
-	@Valid	
 	public @ResponseBody DRCRightsCheckRequiredResponse isRightsCheckRequired( @RequestBody DRCRightsRequiredChecker drcRightsRequiredChecker) {	
+	//public @ResponseBody <E extends DRCResponse<? extends A>> E isRightsCheckRequired( @RequestBody DRCRightsRequiredChecker drcRightsRequiredChecker) {	
 		
 		return new DRCRightsCheckRequiredResponse(drcRequestProducer.isRightsCheckRequired(drcRightsRequiredChecker, drcDao));
 	}
@@ -72,45 +73,51 @@ public class DRCService<T extends MTL, A extends Answer, R extends DRCResponse<A
 	@RequestMapping(value="/ask", method=RequestMethod.POST)
 	@Valid
 	public @ResponseBody <E extends DRCResponse<? extends A>> E askTheQuestion( @RequestBody DRCRequest drcRequest) {	
-
+		E drcResponse = null;
 		
 		Collection<AppControlParamRequiredFields> appControlParamRequiredFieldsList  = null;
 		
-		appControlParamRequiredFieldsList  = drcDao.findAllAppControlParamRequiredFields(drcRequest.getConsumingApplicationName());
-		AppKeyData appKeyData =  null;
+		//we have to validate that the applicationName exists in the request and in the DB before we can
+		//process the request. This is the only field that requires this special treatment
+		if (drcRequest.getConsumingApplicationName() == null) 
+			return (E) new DRCRequestError<A>("the request field: consumingApplicationName is missing.");
+		else {
+			appControlParamRequiredFieldsList  = drcDao.findAllAppControlParamRequiredFields(drcRequest.getConsumingApplicationName());
+			AppKeyData appKeyData =  null;
 		
-		if (!erwsValidator.isDRCRequestValid(drcRequest, 
-				appControlParamRequiredFieldsList,
-				mltDao)) {
-			return (E) new DRCRequestError<A>(erwsValidator.getErrorMessage());
-		} else {
-			appKeyData = new AppKeyData(erwsValidator.getAppKeyValue(), 
-					erwsValidator.getAppKeyField(),
-					erwsValidator.getAppKeyDBName());
+			if (!erwsValidator.isDRCRequestValid(drcRequest, 
+					appControlParamRequiredFieldsList,
+					mltDao)) {
+				return (E) new DRCRequestError<A>(erwsValidator.getErrorMessage());
+			} else {
+				appKeyData = new AppKeyData(erwsValidator.getAppKeyValue(), 
+						erwsValidator.getAppKeyField(),
+						erwsValidator.getAppKeyDBName());
 			
 			
-			System.out.println("after validation appKeyField/appKeyValue: " + appKeyData.getAppKeyField() + "/" + appKeyData.getAppKeyValue());
+				System.out.println("after validation appKeyField/appKeyValue: " + appKeyData.getAppKeyField() + "/" + appKeyData.getAppKeyValue());
+			}
+		
+			//TODO: DRCRequest Validation -- use Bean Validation JSR 303
+		
+			if (this.runningAppSpecificIds.contains(appKeyData.getAppKeyValue())) {
+				return (E) new DRCRequestError<A>(appKeyData.getAppKeyField() + " " + appKeyData.getAppKeyValue()  + " is currently being processed.  Please submit another " + appKeyData.getAppKeyField() + " for a DRC.");
+			} else
+				this.runningAppSpecificIds.add(appKeyData.getAppKeyValue());
+		
+        
+			System.out.println("timestamp --> start processing the request for requestId: " + drcRequest.getRequestId() + ": " + ERMTime.getTime());
+			drcRequest.setResponseId(drcDao.getResponseId());
+			drcResponse = (E) drcRequestProducer.processRequest(drcRequest, appKeyData);
+
+			System.out.println("timestamp --> finish processing the request for requestId/responseId: " + drcRequest.getRequestId() + "/" + drcRequest.getResponseId() + ": " + ERMTime.getTime());
+        
+			//remove the running titleListId from the runningList
+			System.out.println("removing appKeyValue: " + appKeyData.getAppKeyValue());
+			this.runningAppSpecificIds.remove(appKeyData.getAppKeyValue());
+			System.out.println("what does the runningAppSpecificIds contain after processing? " + runningAppSpecificIds.toString());
 		}
 		
-		//TODO: DRCRequest Validation -- use Bean Validation JSR 303
-		
-		if (this.runningAppSpecificIds.contains(appKeyData.getAppKeyValue())) {
-			return (E) new DRCRequestError<A>(appKeyData.getAppKeyField() + " " + appKeyData.getAppKeyValue()  + " is currently being processed.  Please submit another " + appKeyData.getAppKeyField() + " for a DRC.");
-		} else
-			this.runningAppSpecificIds.add(appKeyData.getAppKeyValue());
-		
-        
-		System.out.println("timestamp --> start processing the request for requestId: " + drcRequest.getRequestId() + ": " + ERMTime.getTime());
-		drcRequest.setResponseId(drcDao.getResponseId());
-		E drcResponse = (E) drcRequestProducer.processRequest(drcRequest, appKeyData);
-
-        System.out.println("timestamp --> finish processing the request for requestId/responseId: " + drcRequest.getRequestId() + "/" + drcRequest.getResponseId() + ": " + ERMTime.getTime());
-        
-        //remove the running titleListId from the runningList
-        System.out.println("removing appKeyValue: " + appKeyData.getAppKeyValue());
-        this.runningAppSpecificIds.remove(appKeyData.getAppKeyValue());
-        System.out.println("what does the runningAppSpecificIds contain after processing? " + runningAppSpecificIds.toString());
-        
         return drcResponse;
        
       
