@@ -1,7 +1,7 @@
 package com.fox.it.erws.rest.api.model.drc;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.sql.String;
 
 public class DRCRightsRequiredChecker implements Serializable {
 
@@ -12,9 +12,9 @@ public class DRCRightsRequiredChecker implements Serializable {
 	
 	private String consumingApplicationName;
 
-	private Long productListId; 
+	private Long titleListId; 
 	
-	private Date dateOfLastCheck;
+	private String dateTimeOfLastCheck;
 	
 	public DRCRightsRequiredChecker() {
 		
@@ -22,10 +22,10 @@ public class DRCRightsRequiredChecker implements Serializable {
 	
 	//public DRCRequest(Long requestId, String consumingAppName, Contract contract) {
 		
-	public DRCRightsRequiredChecker(Long productListId, String consumingApplicationName, Date dateOfLastCheck) {
-			setProductListId(productListId);
+	public DRCRightsRequiredChecker(Long titleListId, String consumingApplicationName, String dateTimeOfLastCheck) {
+			setProductListId(titleListId);
 			setConsumingApplicationName(consumingApplicationName);
-			setDateOfLastCheck(dateOfLastCheck);
+			setStringOfLastCheck(dateTimeOfLastCheck);
 	}
 
 	public String getConsumingApplicationName() {
@@ -37,19 +37,19 @@ public class DRCRightsRequiredChecker implements Serializable {
 	}
 
 	public Long getProductListId() {
-		return productListId;
+		return titleListId;
 	}
 
-	public void setProductListId(Long productListId) {
-		this.productListId = productListId;
+	public void setProductListId(Long titleListId) {
+		this.titleListId = titleListId;
 	}
 
-	public Date getDateOfLastCheck() {
-		return dateOfLastCheck;
+	public String getStringOfLastCheck() {
+		return dateTimeOfLastCheck;
 	}
 
-	public void setDateOfLastCheck(Date dateOfLastCheck) {
-		this.dateOfLastCheck = dateOfLastCheck;
+	public void setStringOfLastCheck(String dateTimeOfLastCheck) {
+		this.dateTimeOfLastCheck = dateTimeOfLastCheck;
 	}
 	
 }
