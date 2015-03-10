@@ -1,7 +1,6 @@
 package com.fox.it.erws.rest.api.model.drc;
 
 import java.io.Serializable;
-import java.sql.String;
 
 public class DRCRightsRequiredChecker implements Serializable {
 
@@ -25,7 +24,7 @@ public class DRCRightsRequiredChecker implements Serializable {
 	public DRCRightsRequiredChecker(Long titleListId, String consumingApplicationName, String dateTimeOfLastCheck) {
 			setProductListId(titleListId);
 			setConsumingApplicationName(consumingApplicationName);
-			setStringOfLastCheck(dateTimeOfLastCheck);
+			setDateTimeOfLastCheck(dateTimeOfLastCheck);
 	}
 
 	public String getConsumingApplicationName() {
@@ -44,11 +43,11 @@ public class DRCRightsRequiredChecker implements Serializable {
 		this.titleListId = titleListId;
 	}
 
-	public String getStringOfLastCheck() {
+	public String getDateTimeOfLastCheck() {
 		return dateTimeOfLastCheck;
 	}
 
-	public void setStringOfLastCheck(String dateTimeOfLastCheck) {
+	public void setDateTimeOfLastCheck(String dateTimeOfLastCheck) {
 		this.dateTimeOfLastCheck = dateTimeOfLastCheck;
 	}
 	
