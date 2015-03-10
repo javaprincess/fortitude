@@ -4,6 +4,7 @@ import java.sql.Types;
 import java.util.Map;
 
 import javax.sql.DataSource;
+import javax.sql.Timestap;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SqlOutParameter;
@@ -63,12 +64,12 @@ public class DRCStoredProcedure {
 		.withFunctionName("IS_RIGHTS_CHECK_REQUIRED_PL")
 		.declareParameters(
 				new SqlParameter("PRODUCT_LIST_ID", Types.INTEGER),
-				new SqlParameter("LAST_RIGHTS_CHECK_DATE", Types.DATE),
+				new SqlParameter("LAST_RIGHTS_CHECK_DATE", Types.TIMESTAMP),
 				new SqlParameter("APP_NM", Types.VARCHAR),
 				new SqlOutParameter("result", Types.VARCHAR)
 				);
 	
-		Map<String, Object> simpleJdbcCallResult = simpleJdbcCall.execute(drcRightsRequiredChecker.getProductListId(), drcRightsRequiredChecker.getDateOfLastCheck(), drcRightsRequiredChecker.getConsumingApplicationName());
+		Map<String, Object> simpleJdbcCallResult = simpleJdbcCall.execute(drcRightsRequiredChecker.getProductListId(), Timestamp.valueOf(drcRightsRequiredChecker.getDateTimeOfLastCheck()), drcRightsRequiredChecker.getConsumingApplicationName());
 		System.out.println("simpleJdbcCallResult: " + simpleJdbcCallResult.get("result"));
 		if (simpleJdbcCallResult.get("result").equals("N"))
 			return false;
