@@ -25,7 +25,7 @@ import com.fox.it.erws.rest.api.model.drc.DRCRightsCheckRequiredResponse;
 import com.fox.it.erws.rest.api.model.drc.DRCRightsRequiredChecker;
 import com.fox.it.erws.rest.api.pojos.Answer;
 import com.fox.it.erws.rest.api.pojos.AppControlParamRequiredFields;
-import com.fox.it.erws.rest.api.pojos.mtl.MLT;
+import com.fox.it.erws.rest.api.pojos.mtl.MTL;
 import com.fox.it.erws.rest.api.processor.DRCRequestProducer;
 import com.fox.it.erws.rest.api.util.ERMTime;
 import com.fox.it.erws.rest.api.validation.ERWSValidator;
@@ -34,7 +34,7 @@ import com.wordnik.swagger.annotations.Api;
 
 @Controller
 @Api(value = "/drc", description = "make a request for access the DRC resource and its service layer with a valid access token")
-public class DRCService<T extends MLT, A extends Answer, R extends DRCResponse<A>> {
+public class DRCService<T extends MTL, A extends Answer, R extends DRCResponse<A>> {
 
 	@Autowired
 	private DRCRequestProducer drcRequestProducer;
