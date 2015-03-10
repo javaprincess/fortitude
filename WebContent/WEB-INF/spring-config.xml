@@ -22,12 +22,12 @@
                 <property name="password" value="Wf5y5_dev" />
         </bean -->
 
-	<bean id="springDataSource"
+	<!--  bean id="springDataSource"
          class="org.springframework.jdbc.datasource.DriverManagerDataSource">
                 <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
                 <property name="url" value="jdbc:oracle:thin:@FFEUSCNUXDB72.foxinc.com:1521:ERMT1" />
                 <property name="username" value="erm" />
                 <property name="password" value="TiK4eRm_3" />
-        </bean>
+        </bean -->
 
 </beans>

@@ -13,7 +13,7 @@
 
 	<bean id="drcStoredProcedure"
     class="com.fox.it.erws.rest.api.datasource.DRCStoredProcedure">
- 		<property name="dataSource" ref="springDataSource"/>
+ 		<property name="dataSource" ref="dataSource"/>
 	</bean>
 
 </beans>

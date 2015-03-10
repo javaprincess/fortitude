@@ -35,10 +35,12 @@
             <!--  property name="eclipselink.profiler" value="PerformanceProfiler"/-->
             
          	
-         	 <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.driver.OracleDriver"/>
+         	 <!--  property name="javax.persistence.jdbc.driver" value="oracle.jdbc.driver.OracleDriver"/>
              <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@FFEUSCNUXDB72.foxinc.com:1521:ERMT1"/>
              <property name="javax.persistence.jdbc.user" value="erm"/>
-             <property name="javax.persistence.jdbc.password" value="TiK4eRm_3"/>
+             <property name="javax.persistence.jdbc.password" value="TiK4eRm_3"/ -->
+             
+             <property name="jndiName" value="jdbc/ERMDS"/>
 
 		</properties>			
 	</persistence-unit>
