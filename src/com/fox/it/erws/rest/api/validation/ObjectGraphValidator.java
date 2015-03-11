@@ -40,7 +40,7 @@ public abstract class ObjectGraphValidator extends ERWSValidator{
 	 * @param mltDao
 	 * @return false always
 	 */
-	protected boolean isValid(DRCRequest drcRequest,
+	protected <T extends DRCRequest> boolean isValid(T drcRequest,
 			AppControlParamRequiredFields controlParamObj,
 			ExpressionParser parser,
 			MLTDao mltDao) {

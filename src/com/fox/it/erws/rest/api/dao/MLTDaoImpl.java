@@ -53,7 +53,7 @@ public class MLTDaoImpl<T> implements MLTDao {
     	return findLanguageList().contains(language);
     }
 
-	@SuppressWarnings("unchecked")
+	
 	public List<Media> findMediaList() {
 		EntityManager eM = getEntityManagerFactory().createEntityManager();
 		
@@ -61,15 +61,15 @@ public class MLTDaoImpl<T> implements MLTDao {
 		String activeFlag = "Y";
 		
 		StringBuffer sql = new StringBuffer();
-		sql.append("SELECT media_Id from ");
-		sql.append("Media where media_Id <> 16 ");
-		sql.append("and actv_flg = \'");
+		sql.append("SELECT m.mediaId from ");
+		sql.append("Media m where m.mediaId <> 16 ");
+		sql.append("and m.activeFlag = \'");
 		sql.append(activeFlag);
 		sql.append("\'");
 		
 		try {
 			
-			mediaList =  eM.createNativeQuery(
+			mediaList =  eM.createQuery(
 			//All Media has a mediaId of 16; get only active media
 			sql.toString(), Media.class)
 			.getResultList();
@@ -83,7 +83,7 @@ public class MLTDaoImpl<T> implements MLTDao {
 		return mediaList;
 	}
 	
-	@SuppressWarnings("unchecked")
+	
 	public List<Territory> findTerritoryList() {
 		EntityManager eM = getEntityManagerFactory().createEntityManager();
 		
@@ -91,18 +91,19 @@ public class MLTDaoImpl<T> implements MLTDao {
 		String activeFlag = "Y";
 		
 		StringBuffer sql = new StringBuffer();
-		sql.append("SELECT trrtry_Id from ");
-		sql.append("trrtry where trrtry_Id <> 537 ");
-		sql.append("and actv_flg = \'");
+		sql.append("SELECT t.territoryId from ");
+		sql.append("Territory t where t.territoryId <> 537 ");
+		sql.append("and t.activeFlag = \'");
 		sql.append(activeFlag);
 		sql.append("\'");
 		
+		
 		try {
-			territoryList = eM.createNativeQuery(
+			territoryList = eM.createQuery(
 					//WW has a territoryId of 537; get only active territories
 					sql.toString(), Territory.class)
 					.getResultList(); 
-			
+
 		} catch (Exception e) {
 			log.error("Error in MTLDao.findTerritory(): " + e.getMessage());
 		}
@@ -112,7 +113,7 @@ public class MLTDaoImpl<T> implements MLTDao {
 		return territoryList;
 	}
 	
-	@SuppressWarnings("unchecked")
+
 	public List<Language> findLanguageList() {
 		EntityManager eM = getEntityManagerFactory().createEntityManager();
 		
@@ -120,14 +121,14 @@ public class MLTDaoImpl<T> implements MLTDao {
 		String activeFlag = "Y";
 		
 		StringBuffer sql = new StringBuffer();
-		sql.append("SELECT lngg_Id from ");
-		sql.append("lngg where lngg_Id <> 2 ");
-		sql.append("and actv_flg = \'");
+		sql.append("SELECT l.languageId from ");
+		sql.append("Language l where l.languageId <> 2 ");
+		sql.append("and l.activeFlag = \'");
 		sql.append(activeFlag);
 		sql.append("\'");
 		
 		try {
-			languageList = eM.createNativeQuery(
+			languageList = eM.createQuery(
 					//All Language has a languageId of 2; get only active languages
 					sql.toString(), Language.class)
 					.getResultList(); 
