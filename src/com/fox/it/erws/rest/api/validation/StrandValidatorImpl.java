@@ -19,6 +19,16 @@ public class StrandValidatorImpl extends ObjectGraphValidator {
 	private String appKeyField;
 	private String errorMessage;
 	private String appKeyDBName;
+
+	private String getFieldValueDesrciptionForMessage( String fieldName, Object fieldValue) {
+		String message = fieldName + " with value " + fieldValue;
+		return message;
+	}
+	
+	private String getDetailMessage(String fieldName, Object fieldValue,String dbMessage) {
+		String fieldValueDescription = getFieldValueDesrciptionForMessage(fieldName, fieldValue);
+		return dbMessage + " "  + fieldValueDescription;
+	}
 	
 	public boolean isValid(DRCRequest drcRequest,
 			AppControlParamRequiredFields controlParamObj,
@@ -44,7 +54,8 @@ public class StrandValidatorImpl extends ObjectGraphValidator {
 				if ((controlParamObj.isMlt() == true)) {
 					System.out.println("strandValue: " + value);
 					if (!isMltValid(controlParamObj, value, mltDao)) {
-						setErrorMessage(controlParamObj.getMltErrorMessage());
+						String message = getDetailMessage(controlParamObj.getWebServiceRequiredFieldName(), value,controlParamObj.getMltErrorMessage());
+						setErrorMessage(message);
 						isValid = false;
 						break;
 					}
