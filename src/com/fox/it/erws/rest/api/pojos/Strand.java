@@ -3,6 +3,8 @@ package com.fox.it.erws.rest.api.pojos;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class Strand implements Serializable {
 
 	/**
@@ -20,7 +22,9 @@ public class Strand implements Serializable {
 	private String mobileCellWirelessIndicator;
 	private String internetOpenIndicator;
 	private String internetClosedIndicator;
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", timezone="PST")
 	private Date endDate;
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", timezone="PST")
 	private Date startDate;
 	
 	
@@ -169,7 +173,8 @@ public class Strand implements Serializable {
 	public Date getEndDate() {
 		return endDate;
 	}
-
+	
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", timezone="PST")
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
@@ -177,7 +182,8 @@ public class Strand implements Serializable {
 	public Date getStartDate() {
 		return startDate;
 	}
-
+	
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", timezone="PST")
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
