@@ -1,7 +1,7 @@
 package com.fox.it.erws.rest.api.pojos;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 public class Strand implements Serializable {
 

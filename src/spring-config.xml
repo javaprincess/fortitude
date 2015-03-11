@@ -17,6 +17,6 @@
 	<bean id="dataSource"
          class="org.springframework.jndi.JndiObjectFactoryBean">
                 <property name="jndiName" value="jdbc/ERMDS" />
-        </bean>
+    </bean>
 
 </beans>

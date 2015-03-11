@@ -1,7 +1,7 @@
 package com.fox.it.erws.rest.api.pojos;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -14,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -31,7 +33,8 @@ public class Answer implements Serializable {
 	@Column(name="APP_PROD_LIST_MLT_QRY_ID")
 	private Long appProductListQueryId;
 	
-	@JsonIgnore
+	
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="CRT_DT")
 	private Date createDate;
 	
@@ -39,6 +42,7 @@ public class Answer implements Serializable {
 	@Column(name="CRT_NM")
 	 private String createName;
 	
+	@Temporal(TemporalType.TIMESTAMP)
 	@JsonIgnore
 	@Column(name="UPD_DT")
 	private Date updateDate;
@@ -65,9 +69,11 @@ public class Answer implements Serializable {
 	@Column(name="FOX_VERSION_ID")
 	private Long reqFoxVersionId;
 	
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="FROM_DT")
 	private Date fromDate;
 	
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="TO_DT")
 	private Date toDate;
 	
@@ -95,9 +101,11 @@ public class Answer implements Serializable {
 	@Column(name="QRY_ID")
 	private Long queryId;
 	
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="STRT_TM")
 	 private Date startTime;
 	
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="END_TM")
 	private Date endTime;
 	
@@ -159,6 +167,7 @@ public class Answer implements Serializable {
 	
 	@Transient
 	private int passFlag;
+	
 	
 	@Transient
 	private String reasonText;
@@ -556,7 +565,7 @@ public class Answer implements Serializable {
 		this.withinThroughoutFlag = withinThroughoutFlag;
 	}
 
-	
+
 	public Long getQueryId() {
 	//protected Long getQueryId() {
 		return queryId;

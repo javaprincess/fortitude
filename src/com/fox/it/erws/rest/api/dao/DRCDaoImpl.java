@@ -163,7 +163,6 @@ public class  DRCDaoImpl implements DRCDao {
 		}
 	}
 
-	//TODO: pass around appKeyField/appKeyValue
 	@SuppressWarnings("unchecked")
 	public List<ConsumingApplicationPOJO> find(AppKeyData appKeyData) {
 		EntityManager eM = getEntityManagerFactory().createEntityManager();
@@ -187,10 +186,7 @@ public class  DRCDaoImpl implements DRCDao {
 					//"SELECT run_id from app_prod_list_rghts_chk WHERE " + appKeyData.getAppKeyDBName() + " = " + appKeyData.getAppKeyValue() + " and app_nm = '" + consumingApplicationName + "'", ProductList.class)
 					"SELECT run_id from app_prod_list_rghts_chk WHERE PROD_LIST_ID = " + appKeyData.getAppKeyValue() + " and app_nm = '" + consumingApplicationName + "'", ProductList.class)
 					.getSingleResult(); 
-			
-			
-			System.out.println("retrieved the runId: " + productList.getRunId());
-			
+
 		} catch (Exception e) {
 			log.error("Error in DRCDao.findRunId(): " + e.getMessage());
 		}
@@ -357,8 +353,6 @@ public class  DRCDaoImpl implements DRCDao {
 		sql.append("ORDER BY RCQ.APP_RGHTS_CHK_REQ_ID"); */
 		
 		Collection<Answer> answerList = new ArrayList<Answer>();
-		
-		System.out.println("sql: " + sql.toString());
 		
 		try {
 			

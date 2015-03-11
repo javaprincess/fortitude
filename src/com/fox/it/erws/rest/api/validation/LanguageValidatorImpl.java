@@ -10,6 +10,9 @@ public class LanguageValidatorImpl extends MLTValidator {
 		setValidatorName(name);
 	}
 	public boolean isValid(MLTDao mltDao, Object value) {
+		System.out.println("value: " + value.toString());
+		System.out.println("isValid language: " + mltDao.isValidLanguage(value));
+	
 		return mltDao.isValidLanguage(value);
 	}
 	

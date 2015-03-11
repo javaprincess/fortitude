@@ -1,7 +1,7 @@
 package com.fox.it.erws.rest.api.pojos;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -10,6 +10,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 
@@ -35,12 +37,14 @@ public class RightsCheckDetail implements Serializable {
 	@Column(name="QRY_ID")
 	private Long queryId;
 	
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="CRT_DT")
 	private Date createDate;
 	
 	@Column(name="CRT_NM")
 	 private String createName;
 	
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="UPD_DT")
 	private Date updateDate;
 	

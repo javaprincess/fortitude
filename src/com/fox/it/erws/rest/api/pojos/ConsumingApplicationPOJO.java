@@ -1,7 +1,7 @@
 package com.fox.it.erws.rest.api.pojos;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,6 +15,8 @@ import javax.persistence.NamedNativeQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
@@ -71,12 +73,12 @@ public class ConsumingApplicationPOJO implements Serializable {
 	@Column(name="TITLE_LICENSE_RIGHT_ID")
 	private Long titleLicenseRightId;
 	
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="FROM_DATE")
-	@NotNull
 	private Date startDate;
 	
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="TO_DATE")
-	@NotNull
 	private Date endDate;
 	
 	@Column(name="MLT_GROUP_ID")
@@ -101,7 +103,6 @@ public class ConsumingApplicationPOJO implements Serializable {
 	private String internetClosedIndicator;
 
 	@Column(name="APP_NM")
-	@NotNull
 	private String consumingApplicationName;
 	
 	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY)

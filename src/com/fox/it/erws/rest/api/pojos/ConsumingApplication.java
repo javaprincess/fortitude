@@ -1,6 +1,6 @@
 package com.fox.it.erws.rest.api.pojos;
 
-import java.sql.Date;
+import java.util.Date;
 
 public interface ConsumingApplication {
 

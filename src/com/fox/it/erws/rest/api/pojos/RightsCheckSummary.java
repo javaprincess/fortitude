@@ -1,7 +1,7 @@
 package com.fox.it.erws.rest.api.pojos;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 
@@ -26,21 +28,25 @@ public class RightsCheckSummary implements Serializable {
 	@Column(name="RGHTS_CHK_SMRY_ID")
 	private Long righsCheckSummaryId;
 	
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="CRT_DT")
 	private Date createDate;
 	
 	@Column(name="CRT_NM")
 	 private String createName;
 	
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="UPD_DT")
 	private Date updateDate;
 	
 	@Column(name="UPD_NM")
 	private String updateName;
 	
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="STRT_DT")
 	private Date startDate;
 	
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="END_DT")
 	private Date endDate;
 	

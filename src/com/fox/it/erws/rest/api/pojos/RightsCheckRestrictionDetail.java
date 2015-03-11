@@ -1,12 +1,14 @@
 package com.fox.it.erws.rest.api.pojos;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name="RGHTS_RSTRCN_CD_CHK_DTL")
@@ -21,15 +23,18 @@ public class RightsCheckRestrictionDetail implements Serializable {
 	@Column(name="RGHTS_RSTRCN_CD_CHK_DTL_ID")
 	private Long rightsRestrictionCodeCheckDetailId;
 	
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="CRT_DT")
 	private Date createDate;
 	
 	@Column(name="CRT_NM")
 	 private String createName;
 	
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="UPD_DT")
 	private Date updateDate;
 	
+
 	@Column(name="UPD_NM")
 	private String updateName;
 	

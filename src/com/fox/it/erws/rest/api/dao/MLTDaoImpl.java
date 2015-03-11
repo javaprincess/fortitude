@@ -42,37 +42,41 @@ public class MLTDaoImpl<T> implements MLTDao {
  
 	
     public boolean isValidMedia(Object media) {
-    	if (!findMediaList().contains(media))
-    		return false;
-    	else
-    		return true;
-    }
+    	return findMediaList().contains(media);
+     }
     
     public boolean isValidTerritory(Object territory) {
-    	if (!findTerritoryList().contains(territory))
-    		return false;
-    	else
-    		return true;
+    	return findTerritoryList().contains(territory);
     }
     
-    public boolean isValidLanguage(Object language) {
-    	if (!findLanguageList().contains(language))
-    		return false;
-    	else
-    		return true;
+    public boolean isValidLanguage(Object language) {  	
+    	return findLanguageList().contains(language);
     }
 
+	@SuppressWarnings("unchecked")
 	public List<Media> findMediaList() {
 		EntityManager eM = getEntityManagerFactory().createEntityManager();
 		
 		List<Media> mediaList = null;
+		String activeFlag = "Y";
+		
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT media_Id from ");
+		sql.append("Media where media_Id <> 16 ");
+		sql.append("and actv_flg = \'");
+		sql.append(activeFlag);
+		sql.append("\'");
+		
+		System.out.println("media sql: " + sql.toString());
 		
 		try {
-			mediaList = eM.createQuery(
-					"SELECT m.mediaId from Media m", Media.class)
-					.getResultList(); 
 			
-			System.out.println("size of mediaList: " + mediaList.size());
+			mediaList =  eM.createNativeQuery(
+			//All Media has a mediaId of 16; get only active media
+			//"SELECT mediaId from media where mediaId <> 16 and actv_flg=\'Y\'", Media.class)
+			sql.toString(), Media.class)
+			.getResultList();
+			
 		} catch (Exception e) {
 			log.error("Error in MTLDao.findMedia(): " + e.getMessage());
 		}
@@ -82,16 +86,27 @@ public class MLTDaoImpl<T> implements MLTDao {
 		return mediaList;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<Territory> findTerritoryList() {
 		EntityManager eM = getEntityManagerFactory().createEntityManager();
 		
 		List<Territory> territoryList = null;
+		String activeFlag = "Y";
+		
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT trrtry_Id from ");
+		sql.append("trrtry where trrtry_Id <> 537 ");
+		sql.append("and actv_flg = \'");
+		sql.append(activeFlag);
+		sql.append("\'");
 		
 		try {
-			territoryList = eM.createQuery(
-					"SELECT t.territoryId from Territory t", Territory.class)
+			territoryList = eM.createNativeQuery(
+					//WW has a territoryId of 537; get only active territories
+					//"SELECT t.territoryId from Territory t where t.territoryId <> 537", Territory.class)
+					sql.toString(), Territory.class)
 					.getResultList(); 
-			System.out.println("size of territoryList: " + territoryList.size());
+			
 		} catch (Exception e) {
 			log.error("Error in MTLDao.findTerritory(): " + e.getMessage());
 		}
@@ -101,14 +116,25 @@ public class MLTDaoImpl<T> implements MLTDao {
 		return territoryList;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<Language> findLanguageList() {
 		EntityManager eM = getEntityManagerFactory().createEntityManager();
 		
 		List<Language> languageList = null;
+		String activeFlag = "Y";
+		
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT lngg_Id from ");
+		sql.append("lngg where lngg_Id <> 2 ");
+		sql.append("and actv_flg = \'");
+		sql.append(activeFlag);
+		sql.append("\'");
 		
 		try {
-			languageList = eM.createQuery(
-					"SELECT l.languageId from Language l", Language.class)
+			languageList = eM.createNativeQuery(
+					//All Language has a languageId of 2; get only active languages
+					//"SELECT l.languageId from Language l where l.languageId <> 2", Language.class)
+					sql.toString(), Language.class)
 					.getResultList(); 
 			
 			System.out.println("size of languageList: " + languageList.size());

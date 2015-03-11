@@ -1,6 +1,6 @@
 package com.fox.it.erws.rest.api.pojos.mtl;
 
-import java.sql.Date;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

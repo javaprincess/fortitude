@@ -45,6 +45,11 @@ public class ERWSValidatorImpl<T extends DRCResponse<A>, A extends Answer> exten
 							parser,
 							mltDao);
 					
+					if (!isValid) {
+						setErrorMessage(o.getErrorMessage());
+						break;
+					}
+					
 					if (o.getAppKeyField() != null) {
 						this.setAppKeyField(o.getAppKeyField());
 						this.setAppKeyValue(o.getAppKeyValue());

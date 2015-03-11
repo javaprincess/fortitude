@@ -1,12 +1,14 @@
 package com.fox.it.erws.rest.api.pojos;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name="APP_PROD_LIST_RGHTS_CHK")
@@ -24,6 +26,7 @@ public class ProductList implements Serializable {
 	@Column(name="CRT_NM")
 	private String createName;
 	
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="CRT_DT")
 	private Date createDate;
 	
@@ -36,12 +39,15 @@ public class ProductList implements Serializable {
 	@Column(name="STS_DESC")
 	private String statusDescription;
 	
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="STRT_TM")
 	private Date startTime;
 	
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="END_TM")
 	private Date endTime;
 	
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="MSG")
 	private Date message;
 	

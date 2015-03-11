@@ -1,12 +1,14 @@
 package com.fox.it.erws.rest.api.pojos;
 
-import java.sql.Date;
+import java.util.Date;
 
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Cacheable(false)
 @Entity
@@ -17,6 +19,7 @@ public class AppControlParamRequiredFields {
 		@Column(name="ID")
 		private Long id;
 		
+		@Temporal(TemporalType.TIMESTAMP)
 		@Column(name="CRT_DT")
 		private Date createDate;
 		

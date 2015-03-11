@@ -1,12 +1,14 @@
 package com.fox.it.erws.rest.api.pojos.mtl;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name="TRRTRY")
@@ -24,12 +26,14 @@ public class Territory extends MTL implements Serializable {
 	@Column(name="CRT_NM")
 	private String createName;
 	
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="UPD_DT")
 	private Date updateDate;
 	
 	@Column(name="UPD_NM")
 	private String updateName;
 	
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="CRT_DT")
 	private Date createDate;
 	

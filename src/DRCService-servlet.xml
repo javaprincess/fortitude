@@ -30,6 +30,9 @@
                 <beans:ref bean="jsonMessageConverter"/>
             </beans:list>
         </beans:property>
+        <beans:property name="objectMapper">
+                <beans:bean class="com.fox.it.erws.rest.api.util.ERWSJaxbJacksonObjectMapper" />
+        </beans:property>
     </beans:bean>
      
     <!-- Configure bean to convert JSON to POJO and vice versa -->
