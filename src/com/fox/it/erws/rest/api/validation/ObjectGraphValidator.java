@@ -14,7 +14,7 @@ public abstract class ObjectGraphValidator extends ERWSValidator{
 
 	
 	public static ObjectGraphValidator getInstance(AppControlParamRequiredFields a, AskType askType) {
-	//public static ObjectGraphValidator getInstance(AppControlParamRequiredFields a, Integer askType) {
+		if (askType==null||askType.getType()==null) return null;
 		if ( (a.isBase() == true) &&
 				( askType.getType() == 1) )
 			return new BaseValidatorImpl();
