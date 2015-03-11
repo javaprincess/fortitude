@@ -39,22 +39,23 @@ public class ERWSValidatorImpl<D extends DRCResponse<A>, A extends Answer> exten
 		while (iterator.hasNext()) {
 					AppControlParamRequiredFields controlParamObj = iterator.next();
 					ObjectGraphValidator o = ObjectGraphValidator.getInstance(controlParamObj, askType);
-				
-					isValid = o.isValid(request,
-							controlParamObj,
-							parser,
-							mltDao);
-					
+					if (o!=null) {
+						isValid = o.isValid(request,
+								controlParamObj,
+								parser,
+								mltDao);
 						
-					
-					if (!isValid) {
-						setErrorMessage(o.getErrorMessage());
-						break;
-					}
-					
-					if (o.getAppKeyField() != null) {
-						this.setAppKeyField(o.getAppKeyField());
-						this.setAppKeyValue(o.getAppKeyValue());
+							
+						
+						if (!isValid) {
+							setErrorMessage(o.getErrorMessage());
+							break;
+						}
+						
+						if (o.getAppKeyField() != null) {
+							this.setAppKeyField(o.getAppKeyField());
+							this.setAppKeyValue(o.getAppKeyValue());
+						}
 					}
 
 		}
