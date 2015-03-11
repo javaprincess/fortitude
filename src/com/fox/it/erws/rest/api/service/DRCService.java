@@ -64,9 +64,32 @@ public class DRCService<T extends MTL, A extends Answer, R extends DRCResponse<A
 	
 	@RequestMapping(value="/ask/required", method=RequestMethod.POST)
 	public @ResponseBody DRCRightsCheckRequiredResponse isRightsCheckRequired( @RequestBody DRCRightsRequiredChecker drcRightsRequiredChecker) {	
-	//public @ResponseBody <E extends DRCResponse<? extends A>> E isRightsCheckRequired( @RequestBody DRCRightsRequiredChecker drcRightsRequiredChecker) {	
 		
-		return new DRCRightsCheckRequiredResponse(drcRequestProducer.isRightsCheckRequired(drcRightsRequiredChecker, drcDao));
+		DRCRightsCheckRequiredResponse drcRightsCheckRequiredResponse = null;
+		
+		Collection<AppControlParamRequiredFields> appControlParamRequiredFieldsList  = null;
+		
+		//we have to validate that the applicationName exists in the request and in the DB before we can
+		//process the request. This is the only field that requires this special treatment
+		if (drcRightsRequiredChecker.getConsumingApplicationName() == null) 
+			return new DRCRightsCheckRequiredResponse("the request field: consumingApplicationName is missing.", true);
+		else {
+			//TODO: change the 2nd param to an enumeration
+			appControlParamRequiredFieldsList  = drcDao.findAllAppControlParamRequiredFields(drcRightsRequiredChecker.getConsumingApplicationName(), 2);
+			
+	
+			if (!erwsValidator.isDRCRequestValid(drcRightsRequiredChecker, 
+					appControlParamRequiredFieldsList,
+					mltDao, 2)) {
+						return new DRCRightsCheckRequiredResponse(erwsValidator.getErrorMessage(), true);
+					} 
+		}
+			
+	
+		drcRightsCheckRequiredResponse = new DRCRightsCheckRequiredResponse(drcRequestProducer.isRightsCheckRequired(drcRightsRequiredChecker, 
+				drcDao, 
+				erwsValidator.getAppKeyValue()));
+		return drcRightsCheckRequiredResponse;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -82,12 +105,14 @@ public class DRCService<T extends MTL, A extends Answer, R extends DRCResponse<A
 		if (drcRequest.getConsumingApplicationName() == null) 
 			return (E) new DRCRequestError<A>("the request field: consumingApplicationName is missing.");
 		else {
-			appControlParamRequiredFieldsList  = drcDao.findAllAppControlParamRequiredFields(drcRequest.getConsumingApplicationName());
+			
+			//TODO: change the 2nd param to an enumeration
+			appControlParamRequiredFieldsList  = drcDao.findAllAppControlParamRequiredFields(drcRequest.getConsumingApplicationName(), 1);
 			AppKeyData appKeyData =  null;
 		
 			if (!erwsValidator.isDRCRequestValid(drcRequest, 
 					appControlParamRequiredFieldsList,
-					mltDao)) {
+					mltDao, 1)) {
 				return (E) new DRCRequestError<A>(erwsValidator.getErrorMessage());
 			} else {
 				appKeyData = new AppKeyData(erwsValidator.getAppKeyValue(), 

@@ -3,14 +3,13 @@ package com.fox.it.erws.rest.api.validation;
 
 import java.util.Collection;
 import java.util.Iterator;
+
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.stereotype.Repository;
 
 import com.fox.it.erws.rest.api.dao.MLTDao;
-
 import com.fox.it.erws.rest.api.model.drc.DRCRequest;
-
 import com.fox.it.erws.rest.api.model.drc.DRCResponse;
 import com.fox.it.erws.rest.api.pojos.Answer;
 
@@ -20,15 +19,16 @@ import com.fox.it.erws.rest.api.pojos.AppControlParamRequiredFields;
 
 
 @Repository
-public class ERWSValidatorImpl<T extends DRCResponse<A>, A extends Answer> extends ERWSValidator {
+public class ERWSValidatorImpl<D extends DRCResponse<A>, A extends Answer> extends ERWSValidator {
 	
 	private String appKeyField;
 	private Long appKeyValue;
 	private String errorMessage;
 	
-	public boolean isDRCRequestValid(DRCRequest drcRequest, 
+	public <T extends DRCRequest> boolean isDRCRequestValid(T request, 
 			Collection<AppControlParamRequiredFields> appControlParamRequiredFieldsList,
-			MLTDao mltDao) {
+			MLTDao mltDao, 
+			Integer askType) {
 		
 		boolean isValid = true;
 		
@@ -38,12 +38,18 @@ public class ERWSValidatorImpl<T extends DRCResponse<A>, A extends Answer> exten
 				
 		while (iterator.hasNext()) {
 					AppControlParamRequiredFields controlParamObj = iterator.next();
-					ObjectGraphValidator o = ObjectGraphValidator.getInstance(controlParamObj);
+					ObjectGraphValidator o = ObjectGraphValidator.getInstance(controlParamObj, askType);
+					System.out.println("The fieldName: " + controlParamObj.getWebServiceRequiredFieldName());
+					System.out.println("The keyFlag: " + controlParamObj.getAppKeyFieldFlag());
+					System.out.println("isAskType1: " + controlParamObj.isAskType1());
+					System.out.println("isAskType2: " + controlParamObj.isAskType2());
 					
-					isValid = o.isValid(drcRequest,
+						isValid = o.isValid(request,
 							controlParamObj,
 							parser,
 							mltDao);
+					
+						
 					
 					if (!isValid) {
 						setErrorMessage(o.getErrorMessage());

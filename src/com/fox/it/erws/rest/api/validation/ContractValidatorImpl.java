@@ -32,8 +32,7 @@ public class ContractValidatorImpl extends ObjectGraphValidator {
 		}
 		else {
 			//set the appKeyField and value
-			System.out.println("The fieldName: " + controlParamObj.getWebServiceRequiredFieldName());
-			System.out.println("The keyFlag: " + controlParamObj.getAppKeyFieldFlag());
+			
 			setAppKey(controlParamObj, value);
 			
 		}

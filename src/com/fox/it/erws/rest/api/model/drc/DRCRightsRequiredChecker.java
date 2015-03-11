@@ -2,7 +2,8 @@ package com.fox.it.erws.rest.api.model.drc;
 
 import java.io.Serializable;
 
-public class DRCRightsRequiredChecker implements Serializable {
+
+public class DRCRightsRequiredChecker extends DRCRequest implements Serializable {
 
 	/**
 	 * 
@@ -13,7 +14,17 @@ public class DRCRightsRequiredChecker implements Serializable {
 
 	private Long titleListId; 
 	
+	private Long contractId;
+	
+	private Long titleListMapId;
+	
+	private Long titleLicenseRightId;
+	
+	private Long mltGroupId;
+	
 	private String dateTimeOfLastCheck;
+	
+	private String appKeyField;
 	
 	public DRCRightsRequiredChecker() {
 		
@@ -21,10 +32,21 @@ public class DRCRightsRequiredChecker implements Serializable {
 	
 	//public DRCRequest(Long requestId, String consumingAppName, Contract contract) {
 		
-	public DRCRightsRequiredChecker(Long titleListId, String consumingApplicationName, String dateTimeOfLastCheck) {
-			setProductListId(titleListId);
+	public DRCRightsRequiredChecker(Long contractId,
+			Long titleListId,
+			Long titleListMapId,
+			Long titlelicenseRightId,
+			Long mltGroupId,
+			String consumingApplicationName, 
+			String dateTimeOfLastCheck) {
+			setTitleListId(titleListId);
 			setConsumingApplicationName(consumingApplicationName);
 			setDateTimeOfLastCheck(dateTimeOfLastCheck);
+			setMltGroupId(mltGroupId);
+			setTitleListMapId(titleListMapId);
+			setTitleLicenseRightId(titleLicenseRightId);
+			setContractId(contractId);
+			
 	}
 
 	public String getConsumingApplicationName() {
@@ -35,11 +57,11 @@ public class DRCRightsRequiredChecker implements Serializable {
 		this.consumingApplicationName = consumingApplicationName;
 	}
 
-	public Long getProductListId() {
+	public Long getTitleListId() {
 		return titleListId;
 	}
 
-	public void setProductListId(Long titleListId) {
+	public void setTitleListId(Long titleListId) {
 		this.titleListId = titleListId;
 	}
 
@@ -49,6 +71,46 @@ public class DRCRightsRequiredChecker implements Serializable {
 
 	public void setDateTimeOfLastCheck(String dateTimeOfLastCheck) {
 		this.dateTimeOfLastCheck = dateTimeOfLastCheck;
+	}
+
+	public Long getContractId() {
+		return contractId;
+	}
+
+	public void setContractId(Long contractId) {
+		this.contractId = contractId;
+	}
+
+	public Long getTitleListMapId() {
+		return titleListMapId;
+	}
+
+	public void setTitleListMapId(Long titleListMapId) {
+		this.titleListMapId = titleListMapId;
+	}
+
+	public Long getTitleLicenseRightId() {
+		return titleLicenseRightId;
+	}
+
+	public void setTitleLicenseRightId(Long titleLicenseRightId) {
+		this.titleLicenseRightId = titleLicenseRightId;
+	}
+
+	public Long getMltGroupId() {
+		return mltGroupId;
+	}
+
+	public void setMltGroupId(Long mltGroupId) {
+		this.mltGroupId = mltGroupId;
+	}
+
+	public String getAppKeyField() {
+		return appKeyField;
+	}
+
+	public void setAppKeyField(String appKeyField) {
+		this.appKeyField = appKeyField;
 	}
 	
 }

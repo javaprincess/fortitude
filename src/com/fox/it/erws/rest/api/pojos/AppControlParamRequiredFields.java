@@ -65,6 +65,12 @@ public class AppControlParamRequiredFields {
 		@Column(name="ISMLT")
 		private boolean isMlt;
 		
+		@Column(name="ISASKTYPE1")
+		private boolean isAskType1;
+		
+		@Column(name="ISASKTYPE2")
+		private boolean isAskType2;
+		
 		@Column(name="MLT_ERR_MSG")
 		private String mltErrorMessage;
 	
@@ -186,4 +192,19 @@ public class AppControlParamRequiredFields {
 			this.isTitle = isTitle;
 		}
 			
+		public void setIsAskType1(boolean isAskType1) {
+			this.isAskType1 = isAskType1;
+		}
+		
+		public boolean isAskType1() {
+			return isAskType1;
+		}
+		
+		public void setIsAskType2(boolean isAskType2) {
+			this.isAskType2 = isAskType2;
+		}
+		
+		public boolean isAskType2() {
+			return isAskType2;
+		}
 }

@@ -58,9 +58,10 @@ public class DRCStoredProcedure {
 		return sProc.execute(appKeyValue, withinThroughout, appName);
 	}
 	
-	public boolean getIsRightsCheckRequired(DRCRightsRequiredChecker drcRightsRequiredChecker){
+	public boolean getIsRightsCheckRequired(DRCRightsRequiredChecker drcRightsRequiredChecker,
+			Long appKeyValue){
 		SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate)
-		.withCatalogName("INTERFACES_PC_NEW")
+		.withCatalogName("INTERFACES_PC")
 		.withFunctionName("IS_RIGHTS_CHECK_REQUIRED_PL")
 		.declareParameters(
 				new SqlParameter("PRODUCT_LIST_ID", Types.INTEGER),
@@ -68,8 +69,10 @@ public class DRCStoredProcedure {
 				new SqlParameter("APP_NM", Types.VARCHAR),
 				new SqlOutParameter("result", Types.VARCHAR)
 				);
+		
 	
-		Map<String, Object> simpleJdbcCallResult = simpleJdbcCall.execute(drcRightsRequiredChecker.getProductListId(), Timestamp.valueOf(drcRightsRequiredChecker.getDateTimeOfLastCheck()), drcRightsRequiredChecker.getConsumingApplicationName());
+		//Map<String, Object> simpleJdbcCallResult = simpleJdbcCall.execute(drcRightsRequiredChecker.getTitleListId(), Timestamp.valueOf(drcRightsRequiredChecker.getDateTimeOfLastCheck()), drcRightsRequiredChecker.getConsumingApplicationName());
+		Map<String, Object> simpleJdbcCallResult = simpleJdbcCall.execute(appKeyValue, Timestamp.valueOf(drcRightsRequiredChecker.getDateTimeOfLastCheck()), drcRightsRequiredChecker.getConsumingApplicationName());
 		System.out.println("simpleJdbcCallResult: " + simpleJdbcCallResult.get("result"));
 		if (simpleJdbcCallResult.get("result").equals("N"))
 			return false;
