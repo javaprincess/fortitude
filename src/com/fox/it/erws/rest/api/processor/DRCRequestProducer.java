@@ -25,9 +25,9 @@ public class DRCRequestProducer  {
    
     
     public boolean isRightsCheckRequired(DRCRightsRequiredChecker drcRightsRequiredChecker,
-    		DRCDao drcDao) {
-    	System.out.println("drcRightsRequiredChecker's date of last request: " + drcRightsRequiredChecker.getDateTimeOfLastCheck());
-    	return drcDao.isRightsCheckRequired(drcRightsRequiredChecker);
+    		DRCDao drcDao,
+    		Long appKeyValue) {
+    	return drcDao.isRightsCheckRequired(drcRightsRequiredChecker, appKeyValue);
     }
     
 

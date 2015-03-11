@@ -196,38 +196,6 @@ public class  DRCDaoImpl implements DRCDao {
 		return productList.getRunId();
 	}
 	
-	/*public RightsCheckSummary findRightsCheckSummary(Long queryId) {
-		EntityManager eM = getEntityManagerFactory().createEntityManager();;
-		
-		ApplicationContext ctx = new ClassPathXmlApplicationContext(new String[] {"erws-config.xml"});
-		ERWSConfiguration erwsConfiguration = (ERWSConfiguration)ctx.getBean("ERWSConfiguration");
-		((ClassPathXmlApplicationContext) ctx).close();
-		
-		String hostname = erwsConfiguration.getHostname();
-		
-		RightsCheckSummary rightsCheckSummaryResult = null;
-		
-		try {
-			rightsCheckSummaryResult = eM.createQuery(
-					"SELECT r from RightsCheckSummary r where r.queryId = :queryId", RightsCheckSummary.class)
-					.setParameter("queryId", new Long(queryId))
-					.getSingleResult();
-			
-			//set the transient fields: rightsCheckDetailHref and the rightsCheckRestrictionDetailHref
-			rightsCheckSummaryResult.setRightsCheckDetailHref(hostname + SemanticLinks.DETAILS.getLink() + queryId);
-			rightsCheckSummaryResult.setRightsCheckRestrictionDetailHref(hostname + SemanticLinks.RESTRICTION_DETAILS.getLink() + queryId);
-			
-			
-			eM.close();
-			
-		} catch (Exception e) {
-			System.out.println("Error in DRCDao.findRightsCheckSummary(): " + e.getMessage());
-		}
-		
-		
-		
-		return rightsCheckSummaryResult;
-	}*/
 	
 	public Long getResponseId() {
 		BigDecimal responseId = null;
@@ -424,8 +392,43 @@ public class  DRCDaoImpl implements DRCDao {
 		return appControlParamRequiredFieldsList;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public Collection<AppControlParamRequiredFields> findAllAppControlParamRequiredFields(String appName, Integer askType) {
+		EntityManager eM = getEntityManagerFactory().createEntityManager();
+		Collection<AppControlParamRequiredFields> appControlParamRequiredFieldsList = null;
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT * from APP_CTRL_PARAM_REQ_FLDS where app_nm=\'" + appName + "\'" );
+		
+		//SEE IF THE entities are being cached
+		//Cache cache = eM.getEntityManagerFactory().getCache();
+		//Long entityId =0L;
+		
+		if (askType.equals(1))
+			sql.append(" and isAskType1 = 1");
+		else
+			sql.append(" and isAskType2 = 1");
+		
+		System.out.println("sql: " + sql);
+		
+		try {
+			
+			appControlParamRequiredFieldsList = eM.createNativeQuery(sql.toString(), AppControlParamRequiredFields.class)
+					.setHint("javax.persistence.cache.storeMode", CacheStoreMode.BYPASS)
+					.getResultList();
+			
+			eM.close();
+			
+		} catch (Exception e) {
+			log.error("Error in DRCDao.findRightsCheckDetail(): " + e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return appControlParamRequiredFieldsList;
+	}
 	
-	public boolean isRightsCheckRequired(DRCRightsRequiredChecker drcRightsRequiredChecker) {
+	
+	public boolean isRightsCheckRequired(DRCRightsRequiredChecker drcRightsRequiredChecker,
+			Long appKeyValue) {
 		
 		boolean isRightsCheckRequired = false;
 		
@@ -434,7 +437,7 @@ public class  DRCDaoImpl implements DRCDao {
 		
 		try {
 		  
-			isRightsCheckRequired = drcStoredProcedure.getIsRightsCheckRequired(drcRightsRequiredChecker); 
+			isRightsCheckRequired = drcStoredProcedure.getIsRightsCheckRequired(drcRightsRequiredChecker, appKeyValue); 
 			ctx.close();
 			return isRightsCheckRequired;
 			

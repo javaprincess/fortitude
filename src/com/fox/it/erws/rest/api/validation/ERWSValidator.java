@@ -21,9 +21,10 @@ public abstract class ERWSValidator {
 	 * @param mltDao
 	 * @return false
 	 */
-	public  boolean isDRCRequestValid(DRCRequest drcRequest, 
+	public  <T extends DRCRequest> boolean isDRCRequestValid(T drcRequest, 
 			Collection<AppControlParamRequiredFields> appControlParamRequiredFieldsList,
-			MLTDao mltDao) {
+			MLTDao mltDao,
+			Integer askType) {
 		return false;
 	}
 

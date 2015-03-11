@@ -13,16 +13,23 @@ public abstract class ObjectGraphValidator extends ERWSValidator{
 	protected Logger log = Logger.getLogger(ERWSValidatorImpl.class);
 
 	
-	public static ObjectGraphValidator getInstance(AppControlParamRequiredFields a) {
-		if (a.isBase() == true)
+	//public static ObjectGraphValidator getInstance(AppControlParamRequiredFields a, AskType a) {
+	public static ObjectGraphValidator getInstance(AppControlParamRequiredFields a, Integer askType) {
+		if ( (a.isBase() == true) &&
+				( askType == 1) )
 			return new BaseValidatorImpl();
-		else if (a.isContract() == true)
+		else if ( (a.isContract() == true) &&
+			 	( askType == 1) )
 			return new ContractValidatorImpl();
-		else if (a.isTitle() == true)
+		else if ( (a.isTitle() == true) &&
+				( askType == 1) )
 			return new TitleValidatorImpl();
-		else if (a.isStrand() == true)
+		else if ( (a.isStrand() == true) &&
+				( askType == 1) )
 			return new StrandValidatorImpl();
-		
+		else if ( (a.isAskType2() == true) &&
+				( askType == 2) )
+			return new AskType2Impl();
 		return null;
 	}
 	
