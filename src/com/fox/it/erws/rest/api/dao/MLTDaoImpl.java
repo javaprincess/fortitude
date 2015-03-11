@@ -67,13 +67,10 @@ public class MLTDaoImpl<T> implements MLTDao {
 		sql.append(activeFlag);
 		sql.append("\'");
 		
-		System.out.println("media sql: " + sql.toString());
-		
 		try {
 			
 			mediaList =  eM.createNativeQuery(
 			//All Media has a mediaId of 16; get only active media
-			//"SELECT mediaId from media where mediaId <> 16 and actv_flg=\'Y\'", Media.class)
 			sql.toString(), Media.class)
 			.getResultList();
 			
@@ -103,7 +100,6 @@ public class MLTDaoImpl<T> implements MLTDao {
 		try {
 			territoryList = eM.createNativeQuery(
 					//WW has a territoryId of 537; get only active territories
-					//"SELECT t.territoryId from Territory t where t.territoryId <> 537", Territory.class)
 					sql.toString(), Territory.class)
 					.getResultList(); 
 			
@@ -133,12 +129,9 @@ public class MLTDaoImpl<T> implements MLTDao {
 		try {
 			languageList = eM.createNativeQuery(
 					//All Language has a languageId of 2; get only active languages
-					//"SELECT l.languageId from Language l where l.languageId <> 2", Language.class)
 					sql.toString(), Language.class)
 					.getResultList(); 
-			
-			System.out.println("size of languageList: " + languageList.size());
-		} catch (Exception e) {
+			} catch (Exception e) {
 			log.error("Error in MTLDao.findLanguage(): " + e.getMessage());
 		}
 		
