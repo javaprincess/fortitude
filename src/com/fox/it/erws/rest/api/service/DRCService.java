@@ -28,6 +28,7 @@ import com.fox.it.erws.rest.api.pojos.AppControlParamRequiredFields;
 import com.fox.it.erws.rest.api.pojos.mtl.MTL;
 import com.fox.it.erws.rest.api.processor.DRCRequestProducer;
 import com.fox.it.erws.rest.api.util.ERMTime;
+import com.fox.it.erws.rest.api.validation.AskType;
 import com.fox.it.erws.rest.api.validation.ERWSValidator;
 import com.wordnik.swagger.annotations.Api;
 
@@ -68,6 +69,7 @@ public class DRCService<T extends MTL, A extends Answer, R extends DRCResponse<A
 		DRCRightsCheckRequiredResponse drcRightsCheckRequiredResponse = null;
 		
 		Collection<AppControlParamRequiredFields> appControlParamRequiredFieldsList  = null;
+		AskType askType =  new AskType(2);
 		
 		//we have to validate that the applicationName exists in the request and in the DB before we can
 		//process the request. This is the only field that requires this special treatment
@@ -75,12 +77,13 @@ public class DRCService<T extends MTL, A extends Answer, R extends DRCResponse<A
 			return new DRCRightsCheckRequiredResponse("the request field: consumingApplicationName is missing.", true);
 		else {
 			//TODO: change the 2nd param to an enumeration
-			appControlParamRequiredFieldsList  = drcDao.findAllAppControlParamRequiredFields(drcRightsRequiredChecker.getConsumingApplicationName(), 2);
+			appControlParamRequiredFieldsList  = drcDao.findAllAppControlParamRequiredFields(drcRightsRequiredChecker.getConsumingApplicationName(), askType);
 			
 	
 			if (!erwsValidator.isDRCRequestValid(drcRightsRequiredChecker, 
 					appControlParamRequiredFieldsList,
-					mltDao, 2)) {
+					mltDao, 
+					askType)) {
 						return new DRCRightsCheckRequiredResponse(erwsValidator.getErrorMessage(), true);
 					} 
 		}
@@ -99,6 +102,7 @@ public class DRCService<T extends MTL, A extends Answer, R extends DRCResponse<A
 		E drcResponse = null;
 		
 		Collection<AppControlParamRequiredFields> appControlParamRequiredFieldsList  = null;
+		AskType askType =  new AskType(1);
 		
 		//we have to validate that the applicationName exists in the request and in the DB before we can
 		//process the request. This is the only field that requires this special treatment
@@ -107,12 +111,12 @@ public class DRCService<T extends MTL, A extends Answer, R extends DRCResponse<A
 		else {
 			
 			//TODO: change the 2nd param to an enumeration
-			appControlParamRequiredFieldsList  = drcDao.findAllAppControlParamRequiredFields(drcRequest.getConsumingApplicationName(), 1);
+			appControlParamRequiredFieldsList  = drcDao.findAllAppControlParamRequiredFields(drcRequest.getConsumingApplicationName(), askType);
 			AppKeyData appKeyData =  null;
 		
 			if (!erwsValidator.isDRCRequestValid(drcRequest, 
 					appControlParamRequiredFieldsList,
-					mltDao, 1)) {
+					mltDao, askType)) {
 				return (E) new DRCRequestError<A>(erwsValidator.getErrorMessage());
 			} else {
 				appKeyData = new AppKeyData(erwsValidator.getAppKeyValue(), 

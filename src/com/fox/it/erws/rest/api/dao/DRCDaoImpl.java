@@ -27,6 +27,7 @@ import com.fox.it.erws.rest.api.pojos.ConsumingApplicationPOJO;
 import com.fox.it.erws.rest.api.pojos.ProductList;
 import com.fox.it.erws.rest.api.pojos.RightsCheckDetail;
 import com.fox.it.erws.rest.api.pojos.RightsCheckRestrictionDetail;
+import com.fox.it.erws.rest.api.validation.AskType;
 
 
 @Repository
@@ -393,7 +394,7 @@ public class  DRCDaoImpl implements DRCDao {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Collection<AppControlParamRequiredFields> findAllAppControlParamRequiredFields(String appName, Integer askType) {
+	public Collection<AppControlParamRequiredFields> findAllAppControlParamRequiredFields(String appName, AskType askType) {
 		EntityManager eM = getEntityManagerFactory().createEntityManager();
 		Collection<AppControlParamRequiredFields> appControlParamRequiredFieldsList = null;
 		StringBuffer sql = new StringBuffer();

@@ -10,6 +10,7 @@ import com.fox.it.erws.rest.api.pojos.ConsumingApplication;
 import com.fox.it.erws.rest.api.pojos.ConsumingApplicationPOJO;
 import com.fox.it.erws.rest.api.pojos.RightsCheckDetail;
 import com.fox.it.erws.rest.api.pojos.RightsCheckRestrictionDetail;
+import com.fox.it.erws.rest.api.validation.AskType;
 
 
 public interface DRCDao {
@@ -28,6 +29,6 @@ public interface DRCDao {
 	public List<Long> findProductIds(AppKeyData appKeyData);
 	public boolean isRightsCheckRequired(DRCRightsRequiredChecker drcRightsRequiredChecker,Long appKeyValue);
 	public Collection<AppControlParamRequiredFields> findAllAppControlParamRequiredFields(String appName);
-	public Collection<AppControlParamRequiredFields> findAllAppControlParamRequiredFields(String appName, Integer askType);
+	public Collection<AppControlParamRequiredFields> findAllAppControlParamRequiredFields(String appName, AskType askType);
 	
 }

@@ -28,7 +28,7 @@ public class ERWSValidatorImpl<D extends DRCResponse<A>, A extends Answer> exten
 	public <T extends DRCRequest> boolean isDRCRequestValid(T request, 
 			Collection<AppControlParamRequiredFields> appControlParamRequiredFieldsList,
 			MLTDao mltDao, 
-			Integer askType) {
+			AskType askType) {
 		
 		boolean isValid = true;
 		
@@ -39,12 +39,8 @@ public class ERWSValidatorImpl<D extends DRCResponse<A>, A extends Answer> exten
 		while (iterator.hasNext()) {
 					AppControlParamRequiredFields controlParamObj = iterator.next();
 					ObjectGraphValidator o = ObjectGraphValidator.getInstance(controlParamObj, askType);
-					System.out.println("The fieldName: " + controlParamObj.getWebServiceRequiredFieldName());
-					System.out.println("The keyFlag: " + controlParamObj.getAppKeyFieldFlag());
-					System.out.println("isAskType1: " + controlParamObj.isAskType1());
-					System.out.println("isAskType2: " + controlParamObj.isAskType2());
-					
-						isValid = o.isValid(request,
+				
+					isValid = o.isValid(request,
 							controlParamObj,
 							parser,
 							mltDao);
