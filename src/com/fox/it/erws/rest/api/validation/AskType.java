@@ -5,7 +5,7 @@ public class AskType {
 	Integer type;
 	
 	public AskType(Integer askType) {
-		setType(type);
+		setType(askType);
 	}
 	
 	public Integer getType() {
