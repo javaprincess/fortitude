@@ -14,8 +14,7 @@ public class ContractValidatorImpl extends ObjectGraphValidator {
 
 	public boolean isValid(DRCRequest drcRequest,
 			AppControlParamRequiredFields controlParamObj,
-			ExpressionParser parser,
-			MLTDao mltDao) {
+			ExpressionParser parser) {
 		boolean isValid = true;
 		Contract contract = drcRequest.getContract();
 		

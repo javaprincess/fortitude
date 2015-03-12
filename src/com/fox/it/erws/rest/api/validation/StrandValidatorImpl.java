@@ -2,6 +2,7 @@ package com.fox.it.erws.rest.api.validation;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
@@ -19,6 +20,19 @@ public class StrandValidatorImpl extends ObjectGraphValidator {
 	private String appKeyField;
 	private String errorMessage;
 	private String appKeyDBName;
+	
+	private List<Long> validMediaIds;
+	private List<Long> validTerritoryIds;
+	private List<Long> validLanguageIds;
+	
+	private MTLValidatorFactory mtlValidationFactory;
+	
+	public StrandValidatorImpl(List<Long> validMediaIds,List<Long> validTerritoryIds, List<Long> validLanguageIds) {
+		this.validLanguageIds = validLanguageIds;
+		this.validTerritoryIds = validTerritoryIds;
+		this.validLanguageIds = validLanguageIds;
+		mtlValidationFactory = new MTLValidatorFactory(validMediaIds, validTerritoryIds, validLanguageIds);
+	}
 
 	private String getFieldValueDesrciptionForMessage( String fieldName, Object fieldValue) {
 		String message = fieldName + " with value " + fieldValue;
@@ -32,8 +46,7 @@ public class StrandValidatorImpl extends ObjectGraphValidator {
 	
 	public boolean isValid(DRCRequest drcRequest,
 			AppControlParamRequiredFields controlParamObj,
-			ExpressionParser parser,
-			MLTDao mltDao) {
+			ExpressionParser parser) {
 		boolean isValid = true;
 		
 		Collection<Title> titleCollection = drcRequest.getContract().getTitles();
@@ -53,7 +66,7 @@ public class StrandValidatorImpl extends ObjectGraphValidator {
 				//TODO: MLT value validation
 				if ((controlParamObj.isMlt() == true)) {
 					System.out.println("strandValue: " + value);
-					if (!isMltValid(controlParamObj, (Long)value, mltDao)) {
+					if (!isMltValid(controlParamObj, (Long)value)) {
 						String message = getDetailMessage(controlParamObj.getWebServiceRequiredFieldName(), value,controlParamObj.getMltErrorMessage());
 						setErrorMessage(message);
 						isValid = false;
@@ -81,10 +94,10 @@ public class StrandValidatorImpl extends ObjectGraphValidator {
 		return isValid;
 	}
 	
-	private boolean isMltValid(AppControlParamRequiredFields controlParamObj, Long value, MLTDao mltDao) {
+	private boolean isMltValid(AppControlParamRequiredFields controlParamObj, Long value) {
 
-		return MLTValidator.getInstance(controlParamObj.getWebServiceRequiredFieldName())
-				.isValid(controlParamObj, mltDao, value);
+		return mtlValidationFactory.getInstance(controlParamObj.getWebServiceRequiredFieldName())
+				.isValid(controlParamObj, value);
 		
 	}
 

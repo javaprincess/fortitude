@@ -43,8 +43,8 @@ public class DRCService<T extends MTL, A extends Answer, R extends DRCResponse<A
 	@Autowired 
 	private DRCDao drcDao;
 	
-	@Autowired
-	private MLTDao mltDao;
+//	@Autowired
+//	private MLTDao mltDao;
 	
 	@Autowired
 	private ERWSValidator erwsValidator;
@@ -81,8 +81,7 @@ public class DRCService<T extends MTL, A extends Answer, R extends DRCResponse<A
 			
 	
 			if (!erwsValidator.isDRCRequestValid(DRCRightsCheckRequiredRequest, 
-					appControlParamRequiredFieldsList,
-					mltDao, 
+					appControlParamRequiredFieldsList, 
 					askType)) {
 						return new DRCRightsCheckRequiredResponse(erwsValidator.getErrorMessage(), true);
 					} 
@@ -116,7 +115,7 @@ public class DRCService<T extends MTL, A extends Answer, R extends DRCResponse<A
 		
 			if (!erwsValidator.isDRCRequestValid(drcRequest, 
 					appControlParamRequiredFieldsList,
-					mltDao, askType)) {
+					askType)) {
 				return (E) new DRCRequestError<A>(erwsValidator.getErrorMessage());
 			} else {
 				appKeyData = new AppKeyData(erwsValidator.getAppKeyValue(), 

@@ -21,8 +21,7 @@ public class TitleValidatorImpl extends ObjectGraphValidator {
 	
 	public boolean isValid(DRCRequest drcRequest,
 			AppControlParamRequiredFields controlParamObj,
-			ExpressionParser parser,
-			MLTDao mltDao) {
+			ExpressionParser parser) {
 		boolean isValid = true;
 		
 		Collection<Title> titleCollection = drcRequest.getContract().getTitles();

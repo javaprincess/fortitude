@@ -3,7 +3,7 @@ package com.fox.it.erws.rest.api.validation;
 
 import java.util.Collection;
 
-import com.fox.it.erws.rest.api.dao.MLTDao;
+
 import com.fox.it.erws.rest.api.model.drc.DRCRequest;
 import com.fox.it.erws.rest.api.pojos.AppControlParamRequiredFields;
 
@@ -23,7 +23,6 @@ public abstract class ERWSValidator {
 	 */
 	public  <T extends DRCRequest> boolean isDRCRequestValid(T drcRequest, 
 			Collection<AppControlParamRequiredFields> appControlParamRequiredFieldsList,
-			MLTDao mltDao,
 			AskType askType) {
 		return false;
 	}

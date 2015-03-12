@@ -1,30 +1,27 @@
 package com.fox.it.erws.rest.api.validation;
 
+import java.util.List;
+
 import com.fox.it.erws.rest.api.dao.MLTDao;
 import com.fox.it.erws.rest.api.pojos.AppControlParamRequiredFields;
 
 
-public abstract class MLTValidator  {
+public class MLTValidator  {
+	private final List<Long> validValues;
 	
-	public static MLTValidator getInstance(String mlt) {
-		if (mlt.equals("mediaId"))
-			return new MediaValidatorImpl(mlt);
-		else if (mlt.equals("territoryId"))
-			return new TerritoryValidatorImpl(mlt);
-		else if (mlt.equals("languageId"))
-			return new LanguageValidatorImpl(mlt);
-		
-		return null;
+	public MLTValidator(List<Long> validValues) {
+		this.validValues = validValues;
 	}
+	
 	
 	public boolean isValid(AppControlParamRequiredFields controlParamObj,
-			MLTDao mltDao,
-			Long value) {
-		
-		return MLTValidator.getInstance(controlParamObj.getWebServiceRequiredFieldName()).isValid(mltDao, value);
+			Long value) {		
+		return isValid(value);
 	}
 	
-	protected abstract boolean isValid(MLTDao mltDao,
-			Long value);
+	protected boolean isValid(Long value) {
+		if (validValues==null||validValues.isEmpty()) return false;
+		return validValues.contains(value);
+	}
 
 }
