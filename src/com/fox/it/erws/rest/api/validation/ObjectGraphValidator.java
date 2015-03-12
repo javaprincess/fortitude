@@ -14,21 +14,21 @@ public abstract class ObjectGraphValidator extends ERWSValidator{
 
 	
 	public static ObjectGraphValidator getInstance(AppControlParamRequiredFields a, AskType askType) {
-		if (askType==null||askType.getType()==null) return null;
+		if (askType==null) return null;
 		if ( (a.isBase() == true) &&
-				( askType.getType() == 1) )
+				( askType == AskType.DRC_CHECK) )
 			return new BaseValidatorImpl();
 		else if ( (a.isContract() == true) &&
-			 	( askType.getType() == 1) )
+			 	( askType == AskType.DRC_CHECK) )
 			return new ContractValidatorImpl();
 		else if ( (a.isTitle() == true) &&
-				( askType.getType() == 1) )
+				( askType == AskType.DRC_CHECK) )
 			return new TitleValidatorImpl();
 		else if ( (a.isStrand() == true) &&
-				( askType.getType() == 1) )
+				( askType == AskType.DRC_CHECK) )
 			return new StrandValidatorImpl();
 		else if ( (a.isAskType2() == true) &&
-				( askType.getType() == 2) )
+				( askType == AskType.IS_RIGHTS_CHECK_REQUIRED) )
 			return new AskType2Impl();
 		return null;
 	}

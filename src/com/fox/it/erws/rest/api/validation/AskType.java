@@ -1,19 +1,7 @@
 package com.fox.it.erws.rest.api.validation;
 
-public class AskType {
+public enum AskType {
 	
-	Integer type;
-	
-	public AskType(Integer askType) {
-		setType(askType);
-	}
-	
-	public Integer getType() {
-		return this.type;
-	}
-	
-	public void setType(Integer type) {
-		this.type = type;
-	}
-
+	DRC_CHECK,
+	IS_RIGHTS_CHECK_REQUIRED
 }

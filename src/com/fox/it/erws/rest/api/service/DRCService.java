@@ -69,7 +69,7 @@ public class DRCService<T extends MTL, A extends Answer, R extends DRCResponse<A
 		DRCRightsCheckRequiredResponse drcRightsCheckRequiredResponse = null;
 		
 		Collection<AppControlParamRequiredFields> appControlParamRequiredFieldsList  = null;
-		AskType askType =  new AskType(2);
+		AskType askType =  AskType.IS_RIGHTS_CHECK_REQUIRED;
 		
 		//we have to validate that the applicationName exists in the request and in the DB before we can
 		//process the request. This is the only field that requires this special treatment
@@ -102,7 +102,7 @@ public class DRCService<T extends MTL, A extends Answer, R extends DRCResponse<A
 		E drcResponse = null;
 		
 		Collection<AppControlParamRequiredFields> appControlParamRequiredFieldsList  = null;
-		AskType askType =  new AskType(1);
+		AskType askType =  AskType.DRC_CHECK;
 		
 		//we have to validate that the applicationName exists in the request and in the DB before we can
 		//process the request. This is the only field that requires this special treatment
