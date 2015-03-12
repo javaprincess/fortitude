@@ -12,7 +12,7 @@ import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.jdbc.object.StoredProcedure;
 
-import com.fox.it.erws.rest.api.model.drc.DRCRightsRequiredChecker;
+import com.fox.it.erws.rest.api.model.drc.DRCRightsCheckRequiredRequest;
 
 
 //executes stored procedure to get DRC
@@ -51,14 +51,13 @@ public class DRCStoredProcedure {
 	public void setDataSource(DataSource source) {
 		this.jdbcTemplate = new JdbcTemplate(source);
 		this.sProc =  new RightsCheckForProductList(this.jdbcTemplate.getDataSource());
-//		this.isRightsCheckRequired = new IsRightsCheckRequired(this.jdbcTemplate.getDataSource());
 	}
 
 	public Object getDRCRightsCheck(long appKeyValue, String withinThroughout, String appName) {
 		return sProc.execute(appKeyValue, withinThroughout, appName);
 	}
 	
-	public boolean getIsRightsCheckRequired(DRCRightsRequiredChecker drcRightsRequiredChecker,
+	public boolean getIsRightsCheckRequired(DRCRightsCheckRequiredRequest DRCRightsCheckRequiredRequest,
 			Long appKeyValue){
 		SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate)
 		.withCatalogName("INTERFACES_PC")
@@ -71,14 +70,13 @@ public class DRCStoredProcedure {
 				);
 		
 	
-		//Map<String, Object> simpleJdbcCallResult = simpleJdbcCall.execute(drcRightsRequiredChecker.getTitleListId(), Timestamp.valueOf(drcRightsRequiredChecker.getDateTimeOfLastCheck()), drcRightsRequiredChecker.getConsumingApplicationName());
-		Map<String, Object> simpleJdbcCallResult = simpleJdbcCall.execute(appKeyValue, Timestamp.valueOf(drcRightsRequiredChecker.getDateTimeOfLastCheck()), drcRightsRequiredChecker.getConsumingApplicationName());
-		System.out.println("simpleJdbcCallResult: " + simpleJdbcCallResult.get("result"));
+		System.out.println("timestamp: " +  DRCRightsCheckRequiredRequest.getDateTimeOfLastCheck());
+		
+		Map<String, Object> simpleJdbcCallResult = simpleJdbcCall.execute(appKeyValue, DRCRightsCheckRequiredRequest.getDateTimeOfLastCheck(), DRCRightsCheckRequiredRequest.getConsumingApplicationName());
 		if (simpleJdbcCallResult.get("result").equals("N"))
 			return false;
 		else
 			return true;
-		//return simpleJdbcCallResult;
 			
 	}
 

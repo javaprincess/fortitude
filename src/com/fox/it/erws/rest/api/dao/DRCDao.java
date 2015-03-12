@@ -3,7 +3,7 @@ package com.fox.it.erws.rest.api.dao;
 import java.util.Collection;
 import java.util.List;
 
-import com.fox.it.erws.rest.api.model.drc.DRCRightsRequiredChecker;
+import com.fox.it.erws.rest.api.model.drc.DRCRightsCheckRequiredRequest;
 import com.fox.it.erws.rest.api.pojos.Answer;
 import com.fox.it.erws.rest.api.pojos.AppControlParamRequiredFields;
 import com.fox.it.erws.rest.api.pojos.ConsumingApplication;
@@ -27,7 +27,7 @@ public interface DRCDao {
 	public <A extends Answer> Collection<A> findAnswer(AppKeyData appKeyData);
 	public <K extends ConsumingApplication> void rightsCheck(Long appKeyValue, String withinThroughoutFlag, String consumingApplicationName);
 	public List<Long> findProductIds(AppKeyData appKeyData);
-	public boolean isRightsCheckRequired(DRCRightsRequiredChecker drcRightsRequiredChecker,Long appKeyValue);
+	public boolean isRightsCheckRequired(DRCRightsCheckRequiredRequest DRCRightsCheckRequiredRequest,Long appKeyValue);
 	public Collection<AppControlParamRequiredFields> findAllAppControlParamRequiredFields(String appName);
 	public Collection<AppControlParamRequiredFields> findAllAppControlParamRequiredFields(String appName, AskType askType);
 	

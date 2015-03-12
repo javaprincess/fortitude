@@ -19,7 +19,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Repository;
 
 import com.fox.it.erws.rest.api.datasource.DRCStoredProcedure;
-import com.fox.it.erws.rest.api.model.drc.DRCRightsRequiredChecker;
+import com.fox.it.erws.rest.api.model.drc.DRCRightsCheckRequiredRequest;
 import com.fox.it.erws.rest.api.pojos.Answer;
 import com.fox.it.erws.rest.api.pojos.AppControlParamRequiredFields;
 import com.fox.it.erws.rest.api.pojos.ConsumingApplication;
@@ -428,7 +428,7 @@ public class  DRCDaoImpl implements DRCDao {
 	}
 	
 	
-	public boolean isRightsCheckRequired(DRCRightsRequiredChecker drcRightsRequiredChecker,
+	public boolean isRightsCheckRequired(DRCRightsCheckRequiredRequest DRCRightsCheckRequiredRequest,
 			Long appKeyValue) {
 		
 		boolean isRightsCheckRequired = false;
@@ -438,7 +438,7 @@ public class  DRCDaoImpl implements DRCDao {
 		
 		try {
 		  
-			isRightsCheckRequired = drcStoredProcedure.getIsRightsCheckRequired(drcRightsRequiredChecker, appKeyValue); 
+			isRightsCheckRequired = drcStoredProcedure.getIsRightsCheckRequired(DRCRightsCheckRequiredRequest, appKeyValue); 
 			ctx.close();
 			return isRightsCheckRequired;
 			

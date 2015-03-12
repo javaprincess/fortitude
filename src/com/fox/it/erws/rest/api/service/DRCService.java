@@ -22,7 +22,7 @@ import com.fox.it.erws.rest.api.model.drc.DRCRequest;
 import com.fox.it.erws.rest.api.model.drc.DRCRequestError;
 import com.fox.it.erws.rest.api.model.drc.DRCResponse;
 import com.fox.it.erws.rest.api.model.drc.DRCRightsCheckRequiredResponse;
-import com.fox.it.erws.rest.api.model.drc.DRCRightsRequiredChecker;
+import com.fox.it.erws.rest.api.model.drc.DRCRightsCheckRequiredRequest;
 import com.fox.it.erws.rest.api.pojos.Answer;
 import com.fox.it.erws.rest.api.pojos.AppControlParamRequiredFields;
 import com.fox.it.erws.rest.api.pojos.mtl.MTL;
@@ -64,7 +64,7 @@ public class DRCService<T extends MTL, A extends Answer, R extends DRCResponse<A
 	
 	
 	@RequestMapping(value="/ask/required", method=RequestMethod.POST)
-	public @ResponseBody DRCRightsCheckRequiredResponse isRightsCheckRequired( @RequestBody DRCRightsRequiredChecker drcRightsRequiredChecker) {	
+	public @ResponseBody DRCRightsCheckRequiredResponse isRightsCheckRequired( @RequestBody DRCRightsCheckRequiredRequest DRCRightsCheckRequiredRequest) {	
 		
 		DRCRightsCheckRequiredResponse drcRightsCheckRequiredResponse = null;
 		
@@ -73,14 +73,14 @@ public class DRCService<T extends MTL, A extends Answer, R extends DRCResponse<A
 		
 		//we have to validate that the applicationName exists in the request and in the DB before we can
 		//process the request. This is the only field that requires this special treatment
-		if (drcRightsRequiredChecker.getConsumingApplicationName() == null) 
+		if (DRCRightsCheckRequiredRequest.getConsumingApplicationName() == null) 
 			return new DRCRightsCheckRequiredResponse("the request field: consumingApplicationName is missing.", true);
 		else {
 			//TODO: change the 2nd param to an enumeration
-			appControlParamRequiredFieldsList  = drcDao.findAllAppControlParamRequiredFields(drcRightsRequiredChecker.getConsumingApplicationName(), askType);
+			appControlParamRequiredFieldsList  = drcDao.findAllAppControlParamRequiredFields(DRCRightsCheckRequiredRequest.getConsumingApplicationName(), askType);
 			
 	
-			if (!erwsValidator.isDRCRequestValid(drcRightsRequiredChecker, 
+			if (!erwsValidator.isDRCRequestValid(DRCRightsCheckRequiredRequest, 
 					appControlParamRequiredFieldsList,
 					mltDao, 
 					askType)) {
@@ -89,7 +89,7 @@ public class DRCService<T extends MTL, A extends Answer, R extends DRCResponse<A
 		}
 			
 	
-		drcRightsCheckRequiredResponse = new DRCRightsCheckRequiredResponse(drcRequestProducer.isRightsCheckRequired(drcRightsRequiredChecker, 
+		drcRightsCheckRequiredResponse = new DRCRightsCheckRequiredResponse(drcRequestProducer.isRightsCheckRequired(DRCRightsCheckRequiredRequest, 
 				drcDao, 
 				erwsValidator.getAppKeyValue()));
 		return drcRightsCheckRequiredResponse;

@@ -9,7 +9,7 @@ import com.fox.it.erws.rest.api.dao.AppKeyData;
 import com.fox.it.erws.rest.api.dao.DRCDao;
 import com.fox.it.erws.rest.api.model.drc.DRCRequest;
 import com.fox.it.erws.rest.api.model.drc.DRCResponse;
-import com.fox.it.erws.rest.api.model.drc.DRCRightsRequiredChecker;
+import com.fox.it.erws.rest.api.model.drc.DRCRightsCheckRequiredRequest;
 import com.fox.it.erws.rest.api.model.drc.response.ProductAnswer;
 
 @Component
@@ -24,10 +24,10 @@ public class DRCRequestProducer  {
     
    
     
-    public boolean isRightsCheckRequired(DRCRightsRequiredChecker drcRightsRequiredChecker,
+    public boolean isRightsCheckRequired(DRCRightsCheckRequiredRequest DRCRightsCheckRequiredRequest,
     		DRCDao drcDao,
     		Long appKeyValue) {
-    	return drcDao.isRightsCheckRequired(drcRightsRequiredChecker, appKeyValue);
+    	return drcDao.isRightsCheckRequired(DRCRightsCheckRequiredRequest, appKeyValue);
     }
     
 

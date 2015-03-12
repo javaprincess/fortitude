@@ -1,5 +1,7 @@
 package com.fox.it.erws.rest.api.validation;
 
+import java.sql.Timestamp;
+
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
@@ -10,22 +12,18 @@ import com.fox.it.erws.rest.api.pojos.AppControlParamRequiredFields;
 
 public  class AskType2Impl extends ObjectGraphValidator {
 
-	
-	
-	
-	public <T extends DRCRequest> boolean isValid(T drcRightsRequiredChecker,
+
+	public <T extends DRCRequest> boolean isValid(T DRCRightsCheckRequiredRequest,
 			AppControlParamRequiredFields controlParamObj,
 			ExpressionParser parser,
 			MLTDao mltDao) {
 		boolean isValid = true;
 		
-		StandardEvaluationContext askType2RequestContext = new StandardEvaluationContext(drcRightsRequiredChecker);
+		StandardEvaluationContext askType2RequestContext = new StandardEvaluationContext(DRCRightsCheckRequiredRequest);
 		
 		Expression exp4 = parser.parseExpression(controlParamObj.getWebServiceRequiredFieldName());
-			
-			
-		Object value = exp4.getValue(askType2RequestContext, Object.class);
 		
+		Object value = exp4.getValue(askType2RequestContext, Object.class);
 		
 		if (value == null) {
 			System.out.println(controlParamObj.getRequiredErrorMessage());
@@ -33,9 +31,21 @@ public  class AskType2Impl extends ObjectGraphValidator {
 			return false;
 			
 		} else {
-			//set the appKeyField and value
-			System.out.println("The fieldName: " + controlParamObj.getWebServiceRequiredFieldName());
-			System.out.println("The keyFlag: " + controlParamObj.getAppKeyFieldFlag());
+			System.out.println("value: " + value.toString());
+			
+			//make sure timestamp is not some time in the future.
+			//if we don't do this then if an app asks for an isRightsRequiredCheck
+			//with a date that is in the future, then the RCE will always return false
+			if (controlParamObj.getWebServiceRequiredFieldName().equals("dateTimeOfLastCheck")) {
+				Timestamp dateTimeInRequest = Timestamp.valueOf(value.toString());
+				Timestamp now = new Timestamp(new java.util.Date().getTime());
+				if (dateTimeInRequest.after(now)) {
+					setErrorMessage(controlParamObj.getTagFieldName());
+					return false;
+				}
+			}
+			
+			//set the appKeyField and value for the sake of downstream code
 			setAppKey(controlParamObj, value);
 		}
 		

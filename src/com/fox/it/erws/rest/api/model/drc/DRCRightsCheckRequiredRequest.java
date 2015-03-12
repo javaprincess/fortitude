@@ -1,9 +1,12 @@
 package com.fox.it.erws.rest.api.model.drc;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 
-public class DRCRightsRequiredChecker extends DRCRequest implements Serializable {
+public class DRCRightsCheckRequiredRequest extends DRCRequest implements Serializable {
 
 	/**
 	 * 
@@ -22,22 +25,25 @@ public class DRCRightsRequiredChecker extends DRCRequest implements Serializable
 	
 	private Long mltGroupId;
 	
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd,HH:00:00", timezone="PST")
+	//private Timestamp dateTimeOfLastCheck;
 	private String dateTimeOfLastCheck;
 	
 	private String appKeyField;
 	
-	public DRCRightsRequiredChecker() {
+	public DRCRightsCheckRequiredRequest() {
 		
 	}
 	
 	//public DRCRequest(Long requestId, String consumingAppName, Contract contract) {
 		
-	public DRCRightsRequiredChecker(Long contractId,
+	public DRCRightsCheckRequiredRequest(Long contractId,
 			Long titleListId,
 			Long titleListMapId,
 			Long titlelicenseRightId,
 			Long mltGroupId,
 			String consumingApplicationName, 
+			//Timestamp dateTimeOfLastCheck) {
 			String dateTimeOfLastCheck) {
 			setTitleListId(titleListId);
 			setConsumingApplicationName(consumingApplicationName);
@@ -65,10 +71,12 @@ public class DRCRightsRequiredChecker extends DRCRequest implements Serializable
 		this.titleListId = titleListId;
 	}
 
+	//public Timestamp getDateTimeOfLastCheck() {
 	public String getDateTimeOfLastCheck() {
 		return dateTimeOfLastCheck;
 	}
 
+	//public void setDateTimeOfLastCheck(Timestamp dateTimeOfLastCheck) {
 	public void setDateTimeOfLastCheck(String dateTimeOfLastCheck) {
 		this.dateTimeOfLastCheck = dateTimeOfLastCheck;
 	}
