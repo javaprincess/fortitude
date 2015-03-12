@@ -1,6 +1,5 @@
 package com.fox.it.erws.rest.api.datasource;
 
-import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.Map;
 
