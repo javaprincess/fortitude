@@ -10,8 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import com.fox.it.erws.rest.api.dao.MLTDao;
 import com.fox.it.erws.rest.api.model.drc.DRCRequest;
-import com.fox.it.erws.rest.api.model.drc.DRCResponse;
-import com.fox.it.erws.rest.api.pojos.Answer;
 
 
 
@@ -19,7 +17,7 @@ import com.fox.it.erws.rest.api.pojos.AppControlParamRequiredFields;
 
 
 @Repository
-public class ERWSValidatorImpl<D extends DRCResponse<A>, A extends Answer> extends ERWSValidator {
+public class ERWSValidatorImpl extends ERWSValidator {
 	
 	private String appKeyField;
 	private Long appKeyValue;
