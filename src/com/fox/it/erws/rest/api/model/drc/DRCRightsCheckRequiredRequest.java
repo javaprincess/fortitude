@@ -1,7 +1,7 @@
 package com.fox.it.erws.rest.api.model.drc;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
