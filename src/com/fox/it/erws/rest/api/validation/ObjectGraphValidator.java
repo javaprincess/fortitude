@@ -14,6 +14,8 @@ public abstract class ObjectGraphValidator extends ERWSValidator{
 
 	
 	public static ObjectGraphValidator getInstance(AppControlParamRequiredFields a, AskType askType) {
+		String fieldName = a.getWebServiceRequiredFieldName();
+		System.out.println("Validating " + fieldName);
 		if (askType==null) return null;
 		if ( (a.isBase() == true) &&
 				( askType == AskType.DRC_CHECK) )

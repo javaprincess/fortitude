@@ -10,7 +10,7 @@ public class MediaValidatorImpl extends MLTValidator {
 		setValidatorName(name);
 	}
 	public boolean isValid(MLTDao mltDao,
-			Object value) {
+			Long value) {
 		return mltDao.isValidMedia(value);
 	}
 	

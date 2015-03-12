@@ -404,7 +404,7 @@ public class  DRCDaoImpl implements DRCDao {
 		//Cache cache = eM.getEntityManagerFactory().getCache();
 		//Long entityId =0L;
 		
-		if (askType.equals(1))
+		if (askType==AskType.DRC_CHECK)
 			sql.append(" and isAskType1 = 1");
 		else
 			sql.append(" and isAskType2 = 1");

@@ -19,12 +19,12 @@ public abstract class MLTValidator  {
 	
 	public boolean isValid(AppControlParamRequiredFields controlParamObj,
 			MLTDao mltDao,
-			Object value) {
+			Long value) {
 		
 		return MLTValidator.getInstance(controlParamObj.getWebServiceRequiredFieldName()).isValid(mltDao, value);
 	}
 	
 	protected abstract boolean isValid(MLTDao mltDao,
-			Object value);
+			Long value);
 
 }

@@ -41,23 +41,25 @@ public class MLTDaoImpl implements MLTDao {
     }
  
 	
-    public boolean isValidMedia(Object media) {
-    	return findMediaList().contains(media);
+    public boolean isValidMedia(Long mediaId) {
+    	List<Long> media = findMediaList();
+    	boolean isValid = media.contains(mediaId); 
+    	return isValid;
      }
     
-    public boolean isValidTerritory(Object territory) {
-    	return findTerritoryList().contains(territory);
+    public boolean isValidTerritory(Long territoryId) {
+    	return findTerritoryList().contains(territoryId);
     }
     
-    public boolean isValidLanguage(Object language) {  	
-    	return findLanguageList().contains(language);
+    public boolean isValidLanguage(Long languageId) {  	
+    	return findLanguageList().contains(languageId);
     }
 
 	
-	public List<Media> findMediaList() {
+	public List<Long> findMediaList() {
 		EntityManager eM = getEntityManagerFactory().createEntityManager();
 		
-		List<Media> mediaList = null;
+		List<Long> mediaList = null;
 		String activeFlag = "Y";
 		
 		StringBuffer sql = new StringBuffer();
@@ -71,7 +73,7 @@ public class MLTDaoImpl implements MLTDao {
 			
 			mediaList =  eM.createQuery(
 			//All Media has a mediaId of 16; get only active media
-			sql.toString(), Media.class)
+			sql.toString(), Long.class)
 			.getResultList();
 			
 		} catch (Exception e) {
@@ -84,10 +86,10 @@ public class MLTDaoImpl implements MLTDao {
 	}
 	
 	
-	public List<Territory> findTerritoryList() {
+	public List<Long> findTerritoryList() {
 		EntityManager eM = getEntityManagerFactory().createEntityManager();
 		
-		List<Territory> territoryList = null;
+		List<Long> territoryList = null;
 		String activeFlag = "Y";
 		
 		StringBuffer sql = new StringBuffer();
@@ -101,7 +103,7 @@ public class MLTDaoImpl implements MLTDao {
 		try {
 			territoryList = eM.createQuery(
 					//WW has a territoryId of 537; get only active territories
-					sql.toString(), Territory.class)
+					sql.toString(), Long.class)
 					.getResultList(); 
 
 		} catch (Exception e) {
@@ -114,10 +116,10 @@ public class MLTDaoImpl implements MLTDao {
 	}
 	
 
-	public List<Language> findLanguageList() {
+	public List<Long> findLanguageList() {
 		EntityManager eM = getEntityManagerFactory().createEntityManager();
 		
-		List<Language> languageList = null;
+		List<Long> languageList = null;
 		String activeFlag = "Y";
 		
 		StringBuffer sql = new StringBuffer();
@@ -130,7 +132,7 @@ public class MLTDaoImpl implements MLTDao {
 		try {
 			languageList = eM.createQuery(
 					//All Language has a languageId of 2; get only active languages
-					sql.toString(), Language.class)
+					sql.toString(), Long.class)
 					.getResultList(); 
 			} catch (Exception e) {
 			log.error("Error in MTLDao.findLanguage(): " + e.getMessage());

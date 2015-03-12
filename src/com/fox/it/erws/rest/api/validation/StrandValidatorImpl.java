@@ -49,11 +49,11 @@ public class StrandValidatorImpl extends ObjectGraphValidator {
 				Expression exp4 = parser.parseExpression(controlParamObj.getWebServiceRequiredFieldName());
 
 				Object value = exp4.getValue(strandContext, Object.class);
-			
+//				Long value = exp4.getValue(strandContext, Long.class);
 				//TODO: MLT value validation
 				if ((controlParamObj.isMlt() == true)) {
 					System.out.println("strandValue: " + value);
-					if (!isMltValid(controlParamObj, value, mltDao)) {
+					if (!isMltValid(controlParamObj, (Long)value, mltDao)) {
 						String message = getDetailMessage(controlParamObj.getWebServiceRequiredFieldName(), value,controlParamObj.getMltErrorMessage());
 						setErrorMessage(message);
 						isValid = false;
@@ -81,7 +81,7 @@ public class StrandValidatorImpl extends ObjectGraphValidator {
 		return isValid;
 	}
 	
-	private boolean isMltValid(AppControlParamRequiredFields controlParamObj, Object value, MLTDao mltDao) {
+	private boolean isMltValid(AppControlParamRequiredFields controlParamObj, Long value, MLTDao mltDao) {
 
 		return MLTValidator.getInstance(controlParamObj.getWebServiceRequiredFieldName())
 				.isValid(controlParamObj, mltDao, value);
