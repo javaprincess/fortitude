@@ -18,7 +18,7 @@ import com.fox.it.erws.rest.api.pojos.mtl.Territory;
 
 
 @Repository
-public class MLTDaoImpl<T> implements MLTDao {
+public class MLTDaoImpl implements MLTDao {
 	private Logger log = Logger.getLogger(MLTDaoImpl.class);
 	
 	@PersistenceUnit
