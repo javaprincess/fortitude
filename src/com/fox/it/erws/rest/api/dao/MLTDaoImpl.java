@@ -11,9 +11,6 @@ import javax.persistence.PersistenceUnit;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
-import com.fox.it.erws.rest.api.pojos.mtl.Language;
-import com.fox.it.erws.rest.api.pojos.mtl.Media;
-import com.fox.it.erws.rest.api.pojos.mtl.Territory;
 
 
 
