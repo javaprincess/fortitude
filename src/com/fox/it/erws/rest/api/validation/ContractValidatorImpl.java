@@ -4,7 +4,6 @@ import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 
-import com.fox.it.erws.rest.api.dao.MLTDao;
 import com.fox.it.erws.rest.api.model.drc.DRCRequest;
 import com.fox.it.erws.rest.api.pojos.AppControlParamRequiredFields;
 import com.fox.it.erws.rest.api.pojos.Contract;
@@ -12,10 +11,10 @@ import com.fox.it.erws.rest.api.pojos.Contract;
 public class ContractValidatorImpl extends ObjectGraphValidator {
 
 
-	public boolean isValid(DRCRequest drcRequest,
+	public ValidationResponse isValid(DRCRequest drcRequest,
 			AppControlParamRequiredFields controlParamObj,
-			ExpressionParser parser) {
-		boolean isValid = true;
+			ExpressionParser parser,NodeVisitor nodeVisitor) {
+		ValidationResponse validationResponse = ValidationResponse.getValid();
 		Contract contract = drcRequest.getContract();
 		
 		StandardEvaluationContext contractContext = new StandardEvaluationContext(contract);
@@ -26,61 +25,26 @@ public class ContractValidatorImpl extends ObjectGraphValidator {
 		
 		if (value == null) {
 			System.out.println(controlParamObj.getRequiredErrorMessage());
-			setErrorMessage(controlParamObj.getRequiredErrorMessage());
-			return false;
-		}
-		else {
-			//set the appKeyField and value
-			
-			setAppKey(controlParamObj, value);
-			
+			validationResponse.setErrorMessage(controlParamObj.getRequiredErrorMessage());
+			return validationResponse;
+		} else {
+			nodeVisitor.visit(controlParamObj, value);
 		}
 		
-		return isValid;
+		return validationResponse;
 	}
 
 	
-	public void setAppKey(AppControlParamRequiredFields controlParamObj, Object value) {
-		if (controlParamObj.getAppKeyFieldFlag().equals("Y")) {
-			setAppKeyField(controlParamObj.getWebServiceRequiredFieldName());
-			System.out.println("getAppKeyField: " + getAppKeyField());
-			
-			setAppKeyValue(new Long(value.toString()));
-			setAppKeyDBName(controlParamObj.getFieldName());
-		}
-	}
+//	public void setAppKey(AppControlParamRequiredFields controlParamObj, Object value) {
+//		if (controlParamObj.getAppKeyFieldFlag().equals("Y")) {
+//			setAppKeyField(controlParamObj.getWebServiceRequiredFieldName());
+//			System.out.println("getAppKeyField: " + getAppKeyField());
+//			
+//			setAppKeyValue(new Long(value.toString()));
+//			setAppKeyDBName(controlParamObj.getFieldName());
+//		}
+//	}
 	
-	public String getAppKeyField() {
-		return this.appKeyField;
-	}
-	public void setAppKeyValue(Long appKeyValue) {
-		this.appKeyValue = appKeyValue;
-	}
-	
-	public void setAppKeyField(String appKeyField) {
-		this.appKeyField = appKeyField;
-	}
-	
-	public void setAppKeyDBName(String appKeyDBName) {
-		this.appKeyDBName = appKeyDBName;
-	}
-	
-	public String getAppKeyDBName() {
-		return this.appKeyDBName;
-	}
-	
-	
-	public Long getAppKeyValue() {
-		return this.appKeyValue;
-	}
 
 	
-	public String getErrorMessage() {
-		return this.errorMessage;
-	}
-
-
-	public void setErrorMessage(String errorMessage) {
-		this.errorMessage = errorMessage;
-	} 
 }

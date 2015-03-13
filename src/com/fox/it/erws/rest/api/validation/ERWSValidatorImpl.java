@@ -17,10 +17,7 @@ import com.fox.it.erws.rest.api.pojos.AppControlParamRequiredFields;
 
 @Repository
 public class ERWSValidatorImpl extends ERWSValidator {
-	
-	private String appKeyField;
-	private Long appKeyValue;
-	private String errorMessage;
+
 
 	@Autowired
 	private MLTDao mtlDao;
@@ -40,11 +37,11 @@ public class ERWSValidatorImpl extends ERWSValidator {
 	
 
 	
-	public <T extends DRCRequest> boolean isDRCRequestValid(T request, 
+	public <T extends DRCRequest> ValidationResponse isDRCRequestValid(T request, 
 			Collection<AppControlParamRequiredFields> appControlParamRequiredFieldsList, 
-			AskType askType) {
+			AskType askType,NodeVisitor nodeVisitor) {
 		
-		boolean isValid = true;
+		ValidationResponse validationResponse = ValidationResponse.getValid();
 		
 		ExpressionParser parser = new SpelExpressionParser();
 
@@ -58,53 +55,22 @@ public class ERWSValidatorImpl extends ERWSValidator {
 					AppControlParamRequiredFields controlParamObj = iterator.next();
 					ObjectGraphValidator o = objectGraphValidatorFactory.getInstance(controlParamObj, askType);
 					if (o!=null) {
-						isValid = o.isValid(request,
+						validationResponse = o.isValid(request,
 								controlParamObj,
-								parser);
-						
-							
-						
-						if (!isValid) {
-							setErrorMessage(o.getErrorMessage());
+								parser,nodeVisitor);
+						if (!validationResponse.isValid()) {
 							break;
-						}
-						
-						if (o.getAppKeyField() != null) {
-							this.setAppKeyField(o.getAppKeyField());
-							this.setAppKeyValue(o.getAppKeyValue());
 						}
 					}
 
 		}
 				
 			
-		return isValid;
+		return validationResponse;
 			
 	}
 	
-	public void setAppKeyField(String appKeyField) {
-		this.appKeyField = appKeyField;
-	}
 	
-	public String getAppKeyField() {
-		return this.appKeyField;
-	}
 	
-	public Long getAppKeyValue() {
-		return this.appKeyValue;
-	}
-	
-	public void setAppKeyValue(Long appKeyValue) {
-		this.appKeyValue = appKeyValue;
-	}
-	
-	public void setErrorMessage(String errorMessage) {
-		this.errorMessage = errorMessage;
-	}
-	
-	public String getErrorMessage() {
-		return this.errorMessage;
-	}
-
 }
 

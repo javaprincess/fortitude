@@ -11,12 +11,6 @@ public abstract class ObjectGraphValidator extends ERWSValidator{
 	
 	protected Logger log = Logger.getLogger(ERWSValidatorImpl.class);
 
-	
-
-	
-	
-	
-
 	/**
 	 * Default implementation of isValid.
 	 * 
@@ -26,10 +20,11 @@ public abstract class ObjectGraphValidator extends ERWSValidator{
 	 * @param mltDao
 	 * @return false always
 	 */
-	protected <T extends DRCRequest> boolean isValid(T drcRequest,
+	protected abstract <T extends DRCRequest> ValidationResponse isValid(T drcRequest,
 			AppControlParamRequiredFields controlParamObj,
-			ExpressionParser parser) {
-		return false;
-	}
+			ExpressionParser parser,NodeVisitor nodeVisitor);
+//	{
+//		return ValidationResponse.getInvalid();
+//	}
 
 }

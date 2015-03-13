@@ -365,9 +365,9 @@ public class  DRCDaoImpl implements DRCDao {
 	
 	
 	@SuppressWarnings("unchecked")
-	public Collection<AppControlParamRequiredFields> findAllAppControlParamRequiredFields(String appName) {
+	public List<AppControlParamRequiredFields> findAllAppControlParamRequiredFields(String appName) {
 		EntityManager eM = getEntityManagerFactory().createEntityManager();
-		Collection<AppControlParamRequiredFields> appControlParamRequiredFieldsList = null;
+		List<AppControlParamRequiredFields> appControlParamRequiredFieldsList = null;
 		
 		//SEE IF THE entities are being cached
 		//Cache cache = eM.getEntityManagerFactory().getCache();
@@ -394,9 +394,9 @@ public class  DRCDaoImpl implements DRCDao {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Collection<AppControlParamRequiredFields> findAllAppControlParamRequiredFields(String appName, AskType askType) {
+	public List<AppControlParamRequiredFields> findAllAppControlParamRequiredFields(String appName, AskType askType) {
 		EntityManager eM = getEntityManagerFactory().createEntityManager();
-		Collection<AppControlParamRequiredFields> appControlParamRequiredFieldsList = null;
+		List<AppControlParamRequiredFields> appControlParamRequiredFieldsList = null;
 		StringBuffer sql = new StringBuffer();
 		sql.append("SELECT * from APP_CTRL_PARAM_REQ_FLDS where app_nm=\'" + appName + "\'" );
 		

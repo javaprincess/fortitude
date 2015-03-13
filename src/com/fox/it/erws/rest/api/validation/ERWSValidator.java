@@ -9,10 +9,6 @@ import com.fox.it.erws.rest.api.pojos.AppControlParamRequiredFields;
 
 
 public abstract class ERWSValidator {
-	protected String errorMessage = null;
-	protected String appKeyField = null;
-	protected Long appKeyValue = null;
-	protected String appKeyDBName = null;
 	
 	/**
 	 * Default implementation
@@ -21,35 +17,11 @@ public abstract class ERWSValidator {
 	 * @param mltDao
 	 * @return false
 	 */
-	public  <T extends DRCRequest> boolean isDRCRequestValid(T drcRequest, 
+	public  <T extends DRCRequest> ValidationResponse isDRCRequestValid(T drcRequest, 
 			Collection<AppControlParamRequiredFields> appControlParamRequiredFieldsList,
-			AskType askType) {
-		return false;
+			AskType askType,NodeVisitor nodeVisitor) {
+		return ValidationResponse.getInvalid();
 	}
-
-	
-
-public String getAppKeyDBName() {
-	return this.appKeyDBName;
-} 
-
-public String getAppKeyField() {
-	return this.appKeyField;
-}
-
-public Long getAppKeyValue() {
-	return this.appKeyValue;
-}
-
-
-public String getErrorMessage() {
-	return this.errorMessage;
-}
-
-
-public void setErrorMessage(String errorMessage) {
-	this.errorMessage = errorMessage;
-}
 
 	
 }

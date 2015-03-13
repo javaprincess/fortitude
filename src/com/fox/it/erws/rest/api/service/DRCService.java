@@ -5,6 +5,7 @@ package com.fox.it.erws.rest.api.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -17,19 +18,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fox.it.erws.rest.api.dao.AppKeyData;
 import com.fox.it.erws.rest.api.dao.DRCDao;
-import com.fox.it.erws.rest.api.dao.MLTDao;
 import com.fox.it.erws.rest.api.model.drc.DRCRequest;
 import com.fox.it.erws.rest.api.model.drc.DRCRequestError;
 import com.fox.it.erws.rest.api.model.drc.DRCResponse;
-import com.fox.it.erws.rest.api.model.drc.DRCRightsCheckRequiredResponse;
 import com.fox.it.erws.rest.api.model.drc.DRCRightsCheckRequiredRequest;
+import com.fox.it.erws.rest.api.model.drc.DRCRightsCheckRequiredResponse;
 import com.fox.it.erws.rest.api.pojos.Answer;
 import com.fox.it.erws.rest.api.pojos.AppControlParamRequiredFields;
 import com.fox.it.erws.rest.api.pojos.mtl.MTL;
 import com.fox.it.erws.rest.api.processor.DRCRequestProducer;
 import com.fox.it.erws.rest.api.util.ERMTime;
+import com.fox.it.erws.rest.api.validation.AppKeyAccumulatorVisitor;
 import com.fox.it.erws.rest.api.validation.AskType;
 import com.fox.it.erws.rest.api.validation.ERWSValidator;
+import com.fox.it.erws.rest.api.validation.ValidationResponse;
 import com.wordnik.swagger.annotations.Api;
 
 
@@ -43,13 +45,10 @@ public class DRCService<T extends MTL, A extends Answer, R extends DRCResponse<A
 	@Autowired 
 	private DRCDao drcDao;
 	
-//	@Autowired
-//	private MLTDao mltDao;
 	
 	@Autowired
 	private ERWSValidator erwsValidator;
 	
-//	private Logger log = Logger.getLogger(DRCService.class);
 
 	private Collection<Long> runningAppSpecificIds = null;
 	
@@ -65,32 +64,30 @@ public class DRCService<T extends MTL, A extends Answer, R extends DRCResponse<A
 	
 	@RequestMapping(value="/ask/required", method=RequestMethod.POST)
 	public @ResponseBody DRCRightsCheckRequiredResponse isRightsCheckRequired( @RequestBody DRCRightsCheckRequiredRequest DRCRightsCheckRequiredRequest) {	
-		
 		DRCRightsCheckRequiredResponse drcRightsCheckRequiredResponse = null;
-		
-		Collection<AppControlParamRequiredFields> appControlParamRequiredFieldsList  = null;
 		AskType askType =  AskType.IS_RIGHTS_CHECK_REQUIRED;
+		AppKeyAccumulatorVisitor appKeyAccumulator = new AppKeyAccumulatorVisitor();	
+		
+		List<AppControlParamRequiredFields> appControlParamRequiredFieldsList  = drcDao.findAllAppControlParamRequiredFields(DRCRightsCheckRequiredRequest.getConsumingApplicationName(), askType);
 		
 		//we have to validate that the applicationName exists in the request and in the DB before we can
 		//process the request. This is the only field that requires this special treatment
-		if (DRCRightsCheckRequiredRequest.getConsumingApplicationName() == null) 
+		if (DRCRightsCheckRequiredRequest.getConsumingApplicationName() == null) { 
 			return new DRCRightsCheckRequiredResponse("the request field: consumingApplicationName is missing.", true);
-		else {
-			//TODO: change the 2nd param to an enumeration
-			appControlParamRequiredFieldsList  = drcDao.findAllAppControlParamRequiredFields(DRCRightsCheckRequiredRequest.getConsumingApplicationName(), askType);
-			
-	
-			if (!erwsValidator.isDRCRequestValid(DRCRightsCheckRequiredRequest, 
-					appControlParamRequiredFieldsList, 
-					askType)) {
-						return new DRCRightsCheckRequiredResponse(erwsValidator.getErrorMessage(), true);
-					} 
 		}
-			
+		appControlParamRequiredFieldsList  = drcDao.findAllAppControlParamRequiredFields(DRCRightsCheckRequiredRequest.getConsumingApplicationName(), askType);
+		ValidationResponse validationResponse = erwsValidator.isDRCRequestValid(DRCRightsCheckRequiredRequest, 
+				appControlParamRequiredFieldsList, 
+				askType,appKeyAccumulator);
+	
+		if (!validationResponse.isValid()) {
+					return new DRCRightsCheckRequiredResponse(validationResponse.getErrorMessage(), true);
+				} 
+		AppKeyData appKeyData = appKeyAccumulator.getAppKeyData();
 	
 		drcRightsCheckRequiredResponse = new DRCRightsCheckRequiredResponse(drcRequestProducer.isRightsCheckRequired(DRCRightsCheckRequiredRequest, 
 				drcDao, 
-				erwsValidator.getAppKeyValue()));
+				appKeyData.getAppKeyValue()));
 		return drcRightsCheckRequiredResponse;
 	}
 	
@@ -99,34 +96,25 @@ public class DRCService<T extends MTL, A extends Answer, R extends DRCResponse<A
 	@Valid
 	public @ResponseBody <E extends DRCResponse<? extends A>> E askTheQuestion( @RequestBody DRCRequest drcRequest) {	
 		E drcResponse = null;
+		AskType askType =  AskType.DRC_CHECK;		
+		List<AppControlParamRequiredFields> appControlParamRequiredFieldsList  = drcDao.findAllAppControlParamRequiredFields(drcRequest.getConsumingApplicationName(), askType);
 		
-		Collection<AppControlParamRequiredFields> appControlParamRequiredFieldsList  = null;
-		AskType askType =  AskType.DRC_CHECK;
-		
+//		AppKeyData appKeyData =  appKeyDataProvider.get(appControlParamRequiredFieldsList);		
+		AppKeyAccumulatorVisitor appKeyAccumulator = new AppKeyAccumulatorVisitor();
 		//we have to validate that the applicationName exists in the request and in the DB before we can
 		//process the request. This is the only field that requires this special treatment
 		if (drcRequest.getConsumingApplicationName() == null) 
 			return (E) new DRCRequestError<A>("the request field: consumingApplicationName is missing.");
 		else {
 			
-			//TODO: change the 2nd param to an enumeration
-			appControlParamRequiredFieldsList  = drcDao.findAllAppControlParamRequiredFields(drcRequest.getConsumingApplicationName(), askType);
-			AppKeyData appKeyData =  null;
-		
-			if (!erwsValidator.isDRCRequestValid(drcRequest, 
-					appControlParamRequiredFieldsList,
-					askType)) {
-				return (E) new DRCRequestError<A>(erwsValidator.getErrorMessage());
-			} else {
-				appKeyData = new AppKeyData(erwsValidator.getAppKeyValue(), 
-						erwsValidator.getAppKeyField(),
-						erwsValidator.getAppKeyDBName());
+			ValidationResponse validationResponse = erwsValidator.isDRCRequestValid(drcRequest, appControlParamRequiredFieldsList,askType,appKeyAccumulator);
 			
-			
-				System.out.println("after validation appKeyField/appKeyValue: " + appKeyData.getAppKeyField() + "/" + appKeyData.getAppKeyValue());
-			}
+			if (!validationResponse.isValid()) {
+				return (E) new DRCRequestError<A>(validationResponse.getErrorMessage());
+			} 
+			AppKeyData appKeyData = appKeyAccumulator.getAppKeyData();
+			System.out.println("after validation appKeyField/appKeyValue: " + appKeyData.getAppKeyField() + "/" + appKeyData.getAppKeyValue());
 		
-			//TODO: DRCRequest Validation -- use Bean Validation JSR 303
 		
 			if (this.runningAppSpecificIds.contains(appKeyData.getAppKeyValue())) {
 				return (E) new DRCRequestError<A>(appKeyData.getAppKeyField() + " " + appKeyData.getAppKeyValue()  + " is currently being processed.  Please submit another " + appKeyData.getAppKeyField() + " for a DRC.");

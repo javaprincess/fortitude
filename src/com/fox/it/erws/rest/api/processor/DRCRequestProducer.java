@@ -14,11 +14,6 @@ import com.fox.it.erws.rest.api.model.drc.response.ProductAnswer;
 
 @Component
 public class DRCRequestProducer  {
-	
-	private String errorMessage = null;
-	
-    private DRCResponse<ProductAnswer> drcResponse;
-
    
     public DRCRequestProducer() {}
     
@@ -34,23 +29,19 @@ public class DRCRequestProducer  {
 	public DRCResponse<ProductAnswer> processRequest(DRCRequest drcRequest,
     		AppKeyData appKeyData) {
 
+		DRCResponse<ProductAnswer> drcResponse = new DRCResponse<ProductAnswer>();		
     	Collection<ProductAnswer> answerCollection = null;
 
     	
-    	try {
-    	
-    		answerCollection = new DRCProcBean().harmonize(drcRequest, appKeyData);
-    		this.drcResponse = new DRCResponse<ProductAnswer>();
+    	try {    	
+    		answerCollection = new DRCProcBean().harmonize(drcRequest, appKeyData); 
     		
-    		this.drcResponse.setResponseId(drcRequest.getResponseId());
-    		this.drcResponse.setAnswer(answerCollection);
+    		drcResponse.setResponseId(drcRequest.getResponseId());
+    		drcResponse.setAnswer(answerCollection);
     		
     		
-    	} catch (Exception jmsException) {
-    		
-			setErrorMessage("Contact ERM IT.  A severe error has occurred.");
-		    
-    		System.out.println(jmsException.getMessage());
+    	} catch (Exception e) {
+    		e.printStackTrace();
     	}
     	
     	
@@ -59,12 +50,5 @@ public class DRCRequestProducer  {
     }
 
 
-	public String getErrorMessage() {
-		return errorMessage;
-	}
-
-	public void setErrorMessage(String errorMessage) {
-		this.errorMessage = errorMessage;
-	}
 
 }

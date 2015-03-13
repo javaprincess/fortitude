@@ -36,7 +36,7 @@ public class DRCStoredProcedure {
 				compile();
 			
 			} catch (Exception e) {
-				e.getMessage();
+				e.printStackTrace();
 			}
 		}
 		
