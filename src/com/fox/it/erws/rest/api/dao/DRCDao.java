@@ -24,7 +24,7 @@ public interface DRCDao {
 	//public RightsCheckSummary findRightsCheckSummary(Long queryId);
 	public Collection<RightsCheckRestrictionDetail> findRightsCheckRestrictionDetail(Long queryId);
 	public Collection<RightsCheckDetail> findRightsCheckDetail(Long queryId);
-	public <A extends Answer> Collection<A> findAnswer(AppKeyData appKeyData);
+	public <A extends Answer> Collection<A> findAnswer(AppKeyData appKeyData,String consumingApplicationName);
 	public <K extends ConsumingApplication> void rightsCheck(Long appKeyValue, String withinThroughoutFlag, String consumingApplicationName);
 	public List<Long> findProductIds(AppKeyData appKeyData);
 	public boolean isRightsCheckRequired(DRCRightsCheckRequiredRequest DRCRightsCheckRequiredRequest,Long appKeyValue);

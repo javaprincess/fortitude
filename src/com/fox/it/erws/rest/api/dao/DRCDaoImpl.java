@@ -261,87 +261,138 @@ public class  DRCDaoImpl implements DRCDao {
 	}
 	
 	
-	//public Collection<Answer> findAnswer(Long runId) {
-	public Collection<Answer> findAnswer(AppKeyData appKeyData) {
-		EntityManager eM = getEntityManagerFactory().createEntityManager();
-		StringBuffer sql = new StringBuffer();
-		//SQL Query
-		sql.append("SELECT new com.fox.it.erws.rest.api.pojos.Answer("
-				+ " a.appProductListQueryId,"
-				+ "a.queryId, "
-				+ "a.productListId, "
-				+ "a.appRightsCheckRequestId, "
-				+ "a.createDate, "
-				+ "a.createName, "
-				+ "a.updateName, "
-				+ "a.updateDate, "
-				+ "a.runId, "
-				+ "a.contractId, "
-				+ "a.titleListMapId, "
-				+ "a.titleLicenseRightId, "
-				+ "a.mltGroupId, "
-				+ "ca.reqFoxVersionId, "
-				+ "ca.reqFoxId, "
-				+ "ca.reqFinProdId, "
-				+ "a.fromDate, "
-				+ "a.toDate, "
-				+ "a.mediaId, "
-				+ "a.territoryId, "
-				+ "a.languageId, "
-				+ "a.mobFlag, "
-				+ "a.openInternetFlag, "
-				+ "a.closedInternetFlag, "
-				+ "a.withinThroughoutFlag, "
-				+ "a.startTime, "
-				+ "a.endTime, "
-				+ "a.statusDescription, "
-				+ "a.applicationInterfaceProductId, "
-				+ "a.titleListId, "
-				+ "ca.reqProductId, "
-				+ "rcs.passFlag, "
-				+ "rcs.reasonText, rcs.foxVersionId,  "
-				+ "rcs.startDate, rcs.startDateCode, rcs.endDate, rcs.endDateCode, rcs.generalRestrictionCodes, rcs.licensingRestrictionCodes, rcs.motRestrictionCodes, rcs.restrictionCodes) ");
-		sql.append(" FROM Answer a");
-		sql.append(" INNER JOIN a.consumingApplication ca");
-		sql.append(" LEFT OUTER JOIN a.rightsCheckSummary rcs");
-		sql.append(" WHERE a.productListId=:");
-		sql.append(appKeyData.getAppKeyField());
-		sql.append(" ORDER BY a.appRightsCheckRequestId"); 
-		
-		
-		//SQL Native Query
-		/*sql.append("SELECT PLMQ.*,");
-		sql.append("RCQ.FOX_ID REQ_FOX_ID, RCQ.FOX_VERSION_ID REQ_FOX_VERSION_ID, RCQ.PRODUCT_ID REQ_PRODUCT_ID, RCQ.FIN_PROD_ID REQ_FIN_PROD_ID,");
-		sql.append("NVL(RCS.PASS_FLG,0) PASS_FLG, DECODE(RCS.RGHTS_CHK_SMRY_ID,NULL,'PRODUCT/VERSION NOT FOUND',RCS.RCS.RSN_TXT) RSN_TXT, ");
-		sql.append("RCS.STRT_DT RIGHTS_START_DATE, RCS.STRT_DT_CD RIGHTS_START_DATE_CODE, RCS.END_DT RIGHTS_END_DATE, RCS.END_DT_CD RIGHTS_END_DATE_CODE,");
-		sql.append("RCS.RSTRCN_CDS INFO_CODES, RCS.GNRL_RSTRCN_CDS GENERAL_INFO_CODES, RCS.LCNSNG_RSTRCN_CDS LICENSING_INFO_CODES, RCS.MOT_RSTRCN_CDS MOT_INFO_CODES ");
-		sql.append("FROM APP_PROD_LIST_MLT_QRY PLMQ ");
-		sql.append("INNER JOIN APP_RGHTS_CHK_REQ RCQ ON RCQ.APP_RGHTS_CHK_REQ_ID=PLMQ.APP_RGHTS_CHK_REQ_ID ");
-		sql.append("LEFT OUTER JOIN RGHTS_CHK_SMRY RCS ON PLMQ.QRY_ID=RCS.QRY_ID ");
-		sql.append("WHERE PLMQ.PROD_LIST_ID=? ");        
-		sql.append("ORDER BY RCQ.APP_RGHTS_CHK_REQ_ID"); */
-		
-		Collection<Answer> answerList = new ArrayList<Answer>();
-		
-		try {
-			
-			TypedQuery<Answer> answerQuery = eM.createQuery(sql.toString(), Answer.class)
-			.setParameter(appKeyData.getAppKeyField(), appKeyData.getAppKeyValue());
-			
-			
-			for (Answer answer : answerQuery.getResultList()) {
-				answerList.add(answer);
-			}
-		    	
-			eM.close();
-			
-			
-		} catch (Exception e) {
-			System.out.println("Error in DRCDao.findAnswer(): " + e.getMessage());
-		}
-		
-		return answerList;
-	}
+
+//	public Collection<Answer> findAnswer(AppKeyData appKeyData) {
+//		EntityManager eM = getEntityManagerFactory().createEntityManager();
+//		StringBuffer sql = new StringBuffer();
+//		//SQL Query
+//		sql.append("SELECT new com.fox.it.erws.rest.api.pojos.Answer("
+//				+ " a.appProductListQueryId,"
+//				+ "a.queryId, "
+//				+ "a.productListId, "
+//				+ "a.appRightsCheckRequestId, "
+//				+ "a.createDate, "
+//				+ "a.createName, "
+//				+ "a.updateName, "
+//				+ "a.updateDate, "
+//				+ "a.runId, "
+//				+ "a.contractId, "
+//				+ "a.titleListMapId, "
+//				+ "a.titleLicenseRightId, "
+//				+ "a.mltGroupId, "
+//				+ "ca.reqFoxVersionId, "
+//				+ "ca.reqFoxId, "
+//				+ "ca.reqFinProdId, "
+//				+ "a.fromDate, "
+//				+ "a.toDate, "
+//				+ "a.mediaId, "
+//				+ "a.territoryId, "
+//				+ "a.languageId, "
+//				+ "a.mobFlag, "
+//				+ "a.openInternetFlag, "
+//				+ "a.closedInternetFlag, "
+//				+ "a.withinThroughoutFlag, "
+//				+ "a.startTime, "
+//				+ "a.endTime, "
+//				+ "a.statusDescription, "
+//				+ "a.applicationInterfaceProductId, "
+//				+ "a.titleListId, "
+//				+ "ca.reqProductId, "
+//				+ "rcs.passFlag, "
+//				+ "rcs.reasonText, rcs.foxVersionId,  "
+//				+ "rcs.startDate, rcs.startDateCode, rcs.endDate, rcs.endDateCode, rcs.generalRestrictionCodes, rcs.licensingRestrictionCodes, rcs.motRestrictionCodes, rcs.restrictionCodes) ");
+//		sql.append(" FROM Answer a");
+//		sql.append(" INNER JOIN a.consumingApplication ca");
+//		sql.append(" LEFT OUTER JOIN a.rightsCheckSummary rcs");
+//		sql.append(" WHERE a.productListId=:");
+//		sql.append(appKeyData.getAppKeyField());
+//		sql.append(" ORDER BY a.appRightsCheckRequestId"); 
+//		
+//		
+//		//SQL Native Query
+//		/*sql.append("SELECT PLMQ.*,");
+//		sql.append("RCQ.FOX_ID REQ_FOX_ID, RCQ.FOX_VERSION_ID REQ_FOX_VERSION_ID, RCQ.PRODUCT_ID REQ_PRODUCT_ID, RCQ.FIN_PROD_ID REQ_FIN_PROD_ID,");
+//		sql.append("NVL(RCS.PASS_FLG,0) PASS_FLG, DECODE(RCS.RGHTS_CHK_SMRY_ID,NULL,'PRODUCT/VERSION NOT FOUND',RCS.RCS.RSN_TXT) RSN_TXT, ");
+//		sql.append("RCS.STRT_DT RIGHTS_START_DATE, RCS.STRT_DT_CD RIGHTS_START_DATE_CODE, RCS.END_DT RIGHTS_END_DATE, RCS.END_DT_CD RIGHTS_END_DATE_CODE,");
+//		sql.append("RCS.RSTRCN_CDS INFO_CODES, RCS.GNRL_RSTRCN_CDS GENERAL_INFO_CODES, RCS.LCNSNG_RSTRCN_CDS LICENSING_INFO_CODES, RCS.MOT_RSTRCN_CDS MOT_INFO_CODES ");
+//		sql.append("FROM APP_PROD_LIST_MLT_QRY PLMQ ");
+//		sql.append("INNER JOIN APP_RGHTS_CHK_REQ RCQ ON RCQ.APP_RGHTS_CHK_REQ_ID=PLMQ.APP_RGHTS_CHK_REQ_ID ");
+//		sql.append("LEFT OUTER JOIN RGHTS_CHK_SMRY RCS ON PLMQ.QRY_ID=RCS.QRY_ID ");
+//		sql.append("WHERE PLMQ.PROD_LIST_ID=? ");        
+//		sql.append("ORDER BY RCQ.APP_RGHTS_CHK_REQ_ID"); */
+//		
+//		Collection<Answer> answerList = new ArrayList<Answer>();
+//		
+//		try {
+//			
+//			TypedQuery<Answer> answerQuery = eM.createQuery(sql.toString(), Answer.class)
+//			.setParameter(appKeyData.getAppKeyField(), appKeyData.getAppKeyValue());
+//			
+//			
+//			for (Answer answer : answerQuery.getResultList()) {
+//				answerList.add(answer);
+//			}
+//		    	
+//			eM.close();
+//			
+//			
+//		} catch (Exception e) {
+//			System.out.println("Error in DRCDao.findAnswer(): " + e.getMessage());
+//		}
+//		
+//		return answerList;
+//	}
+	
+	@SuppressWarnings("unchecked")
+    public Collection<Answer> findAnswer(AppKeyData appKeyData, String consumingApplicationName) {
+           EntityManager eM = getEntityManagerFactory().createEntityManager();
+           StringBuffer sql = new StringBuffer();
+           
+           TypedQuery<Answer> answerQuery = null;
+           Collection<Answer> answerCollection = null;
+           
+           
+           sql.append("SELECT PLMQ.CRT_DT, PLMQ.CRT_NM, PLMQ.UPD_DT, PLMQ.UPD_NM, PLMQ.APP_PROD_LIST_MLT_QRY_ID, PLMQ.RUN_ID, ");
+           sql.append(" PLMQ.CNTRCT_ID, PLMQ.TTL_LIST_MAP_ID, PLMQ.TTL_LCNS_RGHT_ID, PLMQ.MLT_GRP_ID, PLMQ.FOX_VERSION_ID, PLMQ.FROM_DT, ");
+           sql.append(" PLMQ.TO_DT, PLMQ.MEDIA_ID, PLMQ.TRRTRY_ID, PLMQ.LNGG_ID, PLMQ.MOB_FLG, PLMQ.OPN_INET_FLG, PLMQ.CLSD_INET_FLG, ");
+           sql.append(" PLMQ.WTHN_THRU_FLG, PLMQ.QRY_ID, PLMQ.STRT_TM, PLMQ.END_TM, PLMQ.STS_DESC, PLMQ.PROD_LIST_ID, PLMQ.WPR_PROD_ID, ");
+           sql.append(" PLMQ.APP_INTRFC_PROD_ID, PLMQ.APP_RGHTS_CHK_REQ_ID, PLMQ.TTL_LIST_ID ,");
+           sql.append(" RCQ.FOX_ID REQ_FOX_ID, RCQ.FOX_VERSION_ID REQ_FOX_VERSION_ID, RCQ.PRODUCT_ID REQ_PRODUCT_ID, RCQ.FIN_PROD_ID REQ_FIN_PROD_ID, ");
+           sql.append(" NVL(RCS.PASS_FLG,0) PASS_FLG, RSN_TXT, ");
+           sql.append(" RCS.STRT_DT RIGHTS_START_DATE, RCS.STRT_DT_CD RIGHTS_START_DATE_CODE, RCS.END_DT RIGHTS_END_DATE, RCS.END_DT_CD RIGHTS_END_DATE_CODE, ");
+           sql.append(" RCS.RSTRCN_CDS INFO_CODES, RCS.GNRL_RSTRCN_CDS GENERAL_INFO_CODES, RCS.LCNSNG_RSTRCN_CDS LICENSING_INFO_CODES, RCS.MOT_RSTRCN_CDS MOT_INFO_CODES ");
+           sql.append(" FROM APP_PROD_LIST_MLT_QRY PLMQ ");
+           sql.append(" INNER JOIN APP_RGHTS_CHK_REQ RCQ ON RCQ.APP_RGHTS_CHK_REQ_ID=PLMQ.APP_RGHTS_CHK_REQ_ID ");
+           sql.append(" LEFT OUTER JOIN RGHTS_CHK_SMRY RCS ON PLMQ.QRY_ID=RCS.QRY_ID ");
+           sql.append(" WHERE PLMQ.PROD_LIST_ID=?   ");
+           sql.append(" AND RCQ.APP_NM=? " );     
+           sql.append(" ORDER BY RCQ.APP_RGHTS_CHK_REQ_ID ");
+           
+           System.out.println("sql: " + sql.toString());
+           
+           //Collection<Answer> answerList = new ArrayList<Answer>();
+           
+           try {
+                  
+                  
+                  answerQuery = (TypedQuery<Answer>) eM.createNativeQuery(sql.toString(), Answer.class)
+                  .setParameter(1, appKeyData.getAppKeyValue())
+                  .setParameter(2, consumingApplicationName);
+                  
+                  answerCollection = answerQuery.getResultList();
+                  
+                  System.out.println("consumingApplicationName in the dao: "  + consumingApplicationName);
+                  
+                  eM.close();
+                  
+                  
+           } catch (Exception e) {
+                  e.printStackTrace();
+           }
+           
+           return answerCollection;
+    }
+	
 	
 	public <K extends ConsumingApplication> void rightsCheck(Long appKeyValue, String withinThroughoutFlag, String consumingApplicationName) {
 		

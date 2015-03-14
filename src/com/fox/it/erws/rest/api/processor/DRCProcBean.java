@@ -68,7 +68,7 @@ public class DRCProcBean {
   
 	 static public  class DRCResponseProducer extends DRCProcBean {
 		 
-    	 private static Collection<Answer> dbAnswerCollection;
+
     	 private static Long responseId;
     	 private static AppKeyData appKeyData;
     	
@@ -87,15 +87,14 @@ public class DRCProcBean {
     	 public Collection<ProductAnswer> answerCreation() { //throws JMSException {
     		 Collection<ProductAnswer> answerCollection = null;
     		 Long runId = 0L;
-    		 
+
     		 runId = drcDao.findRunId(appKeyData, getConsumingApplicationName());
     		 
     		 System.out.println("**************************  RUN ID: " + runId + " ******************************");
     		
     		 
     		 if (runId > 0) {
-    			
-    		    dbAnswerCollection = drcDao.findAnswer(appKeyData);
+    	    	 Collection<Answer> dbAnswerCollection =   dbAnswerCollection = drcDao.findAnswer(appKeyData,getConsumingApplicationName());
     		    
     		
     		   if (dbAnswerCollection.size() > 0) {
@@ -135,7 +134,7 @@ public class DRCProcBean {
 
     	    } //if there is a runId
     		 
-    		 System.out.println("answerCollectionElement in the DRCProcBean right before return: " + answerCollection.toString()); 
+ 
 		    	
     		 return answerCollection;
     		 

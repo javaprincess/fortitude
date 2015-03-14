@@ -108,8 +108,8 @@ public class Normalizer {
 			
 			ProductAnswer productAnswer  =  null;
 			
-			String previousPiD = null;
-			String currentPiD = null;
+			Long previousPiD = null;
+			Long currentPiD = null;
 			
 			Long currentFvId = 0L;
 			Long previousFvId = 0L;
@@ -130,8 +130,8 @@ public class Normalizer {
 					
 					collectionCounter++;
 		
-					
-					currentPiD = answerElement.getReqProductId().toString();
+					//TODO figure out why is this a string
+					currentPiD = answerElement.getReqProductId();
 					currentFvId = answerElement.getReqFoxVersionId();
 					currentFiD = answerElement.getReqFoxId();
 					currentFPiD = answerElement.getReqFinProdId();
@@ -151,7 +151,7 @@ public class Normalizer {
 						//if no more elements, add to the collection
 						if (collectionCounter == collectionSize) {
 							System.out.println("we are at the end -- reqFoxVersionId: " + answerElement.getReqFoxVersionId());
-							productAnswer = new ProductAnswer(new Long(currentPiD), 
+							productAnswer = new ProductAnswer(currentPiD, 
 									currentFvId,
 									currentFiD,
 									currentFPiD,
@@ -171,7 +171,7 @@ public class Normalizer {
 						//if no more elements, add to the collection
 						if (collectionCounter == collectionSize) {
 							
-							productAnswer = new ProductAnswer(new Long(currentPiD), 
+							productAnswer = new ProductAnswer(currentPiD, 
 									currentFvId,
 									currentFiD,
 									currentFPiD,
@@ -182,7 +182,7 @@ public class Normalizer {
 						}
 					} else {
 						//save the old list
-						productAnswer = new ProductAnswer(new Long(previousPiD), 
+						productAnswer = new ProductAnswer(previousPiD, 
 								previousFvId,
 								previousFiD,
 								previousFPiD,
@@ -204,7 +204,7 @@ public class Normalizer {
 						
 						if (collectionCounter == collectionSize) {
 							
-							productAnswer = new ProductAnswer(new Long(currentPiD), 
+							productAnswer = new ProductAnswer(currentPiD, 
 									currentFvId,
 									currentFiD,
 									currentFPiD,
