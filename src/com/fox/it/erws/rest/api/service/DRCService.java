@@ -3,9 +3,8 @@ package com.fox.it.erws.rest.api.service;
 //This is the entry point for consumers interested accessing rights data from ERM
 //This is a swagger resource
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -50,14 +49,9 @@ public class DRCService<T extends MTL, A extends Answer, R extends DRCResponse<A
 	private ERWSValidator erwsValidator;
 	
 
-	private Collection<Long> runningAppSpecificIds = null;
+	private RunningQueries runningQueries = new RunningQueries();
 	
 	public DRCService() {
-		if (this.runningAppSpecificIds == null) {
-			System.out.println("timestamp --> initializing the AppSpecificId cache here: " + ERMTime.getTime());
-			this.runningAppSpecificIds = new ArrayList<Long>();
-			this.runningAppSpecificIds.add(-1L);
-		}
 		
 	}
 	
@@ -98,12 +92,12 @@ public class DRCService<T extends MTL, A extends Answer, R extends DRCResponse<A
 		E drcResponse = null;
 		AskType askType =  AskType.DRC_CHECK;		
 		List<AppControlParamRequiredFields> appControlParamRequiredFieldsList  = drcDao.findAllAppControlParamRequiredFields(drcRequest.getConsumingApplicationName(), askType);
-		
+		String applicationName = drcRequest.getConsumingApplicationName();
 //		AppKeyData appKeyData =  appKeyDataProvider.get(appControlParamRequiredFieldsList);		
 		AppKeyAccumulatorVisitor appKeyAccumulator = new AppKeyAccumulatorVisitor();
 		//we have to validate that the applicationName exists in the request and in the DB before we can
 		//process the request. This is the only field that requires this special treatment
-		if (drcRequest.getConsumingApplicationName() == null) 
+		if ( applicationName == null) 
 			return (E) new DRCRequestError<A>("the request field: consumingApplicationName is missing.");
 		else {
 			
@@ -115,12 +109,12 @@ public class DRCService<T extends MTL, A extends Answer, R extends DRCResponse<A
 			AppKeyData appKeyData = appKeyAccumulator.getAppKeyData();
 			System.out.println("after validation appKeyField/appKeyValue: " + appKeyData.getAppKeyField() + "/" + appKeyData.getAppKeyValue());
 		
-		
-			if (this.runningAppSpecificIds.contains(appKeyData.getAppKeyValue())) {
+			ApplicationQuery applicationQuery = AppKeyDataToRunningQueryConverter.get(applicationName, appKeyData);
+			if (runningQueries.isRunning(applicationQuery)) {
 				return (E) new DRCRequestError<A>(appKeyData.getAppKeyField() + " " + appKeyData.getAppKeyValue()  + " is currently being processed.  Please submit another " + appKeyData.getAppKeyField() + " for a DRC.");
-			} else
-				this.runningAppSpecificIds.add(appKeyData.getAppKeyValue());
-		
+			} else {
+				runningQueries.setAsRunning(applicationQuery);
+			}
         
 			System.out.println("timestamp --> start processing the request for requestId: " + drcRequest.getRequestId() + ": " + ERMTime.getTime());
 			drcRequest.setResponseId(drcDao.getResponseId());
@@ -130,8 +124,7 @@ public class DRCService<T extends MTL, A extends Answer, R extends DRCResponse<A
         
 			//remove the running titleListId from the runningList
 			System.out.println("removing appKeyValue: " + appKeyData.getAppKeyValue());
-			this.runningAppSpecificIds.remove(appKeyData.getAppKeyValue());
-			System.out.println("what does the runningAppSpecificIds contain after processing? " + runningAppSpecificIds.toString());
+			runningQueries.remove(applicationQuery);
 		}
 		
         return drcResponse;
@@ -139,13 +132,12 @@ public class DRCService<T extends MTL, A extends Answer, R extends DRCResponse<A
       
 	}
 	
-	@RequestMapping(value="/cache", method=RequestMethod.POST)
+	@RequestMapping(value="/cache/remove", method=RequestMethod.POST)
 	@Valid
-	public @ResponseBody String cacheManagement( @RequestBody Long appKeyValue) {	
+	public @ResponseBody String cacheManagement( @RequestBody ApplicationQuery appKeyValue) {	
 		String message = null;
-		
-		if (runningAppSpecificIds.contains(appKeyValue)) {
-			this.runningAppSpecificIds.remove(appKeyValue);
+		if (runningQueries.isRunning(appKeyValue)) {
+			runningQueries.remove(appKeyValue);
 			message = appKeyValue + " has been removed from the cache";
 		} else
 			message = appKeyValue + " does not exist in the cache";
@@ -155,8 +147,8 @@ public class DRCService<T extends MTL, A extends Answer, R extends DRCResponse<A
 	
 	@RequestMapping(value="/cache/view", method=RequestMethod.GET)
 	@Valid
-	public @ResponseBody Collection<Long>  cacheManagementView() {	
-		return runningAppSpecificIds;
+	public @ResponseBody Set<ApplicationQuery>  cacheManagementView() {	
+		return runningQueries.getAll();
 	}
 	
 }

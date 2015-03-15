@@ -128,64 +128,63 @@ public class Answer implements Serializable {
 	private Long appRightsCheckRequestId;
 
 	
-	@OneToOne(optional=false)
-	@JoinColumn(name="QRY_ID", referencedColumnName="QRY_ID", insertable=false, updatable=false)
-	private RightsCheckSummary rightsCheckSummary;
-	
-	
-	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-	@JoinColumn(name="APP_RGHTS_CHK_REQ_ID", insertable=false, updatable=false)
-	private ConsumingApplicationPOJO consumingApplication;
+//	@OneToOne(optional=false)
+//	@JoinColumn(name="QRY_ID", referencedColumnName="QRY_ID", insertable=false, updatable=false)
+//	private RightsCheckSummary rightsCheckSummary;
+//	
+//	
+//	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+//	@JoinColumn(name="APP_RGHTS_CHK_REQ_ID", insertable=false, updatable=false)
+//	private ConsumingApplicationPOJO consumingApplication;
 	
 	@Transient
 	private Collection<RightsCheckDetailDTO> rightsCheckDetail;
 	
-	@Transient
+	@Column(name="MOT_INFO_CODES")
 	private String  motRestrictionCodes;
 	
-	@Transient
+	@Column(name="LICENSING_INFO_CODES")
 	private String licensingRestrictionCodes;
 	
-	@Transient
+	@Column(name="GENERAL_INFO_CODES")
 	private String generalRestrictionCodes;
 	
-	@Transient
+	@Column(name="INFO_CODES")
 	private String restrictionCodes;
 	
-	@Transient
+	@Column(name="REQ_FOX_VERSION_ID")
 	private Long foxVersionId;
 	
-	@Transient
+	@Column(name="REQ_FOX_ID")
 	private Long reqFoxId;
 	
-	@Transient
+	@Column(name="REQ_PRODUCT_ID")
 	private Long reqProductId;
 	
-	
-	@Transient
+	@Column(name="REQ_FIN_PROD_ID")	
 	private String reqFinProdId;
 	
-	@Transient
+	@Column(name="PASS_FLG")
 	private int passFlag;
 	
 	
-	@Transient
+	@Column(name="RSN_TXT")
 	private String reasonText;
 	
-	
-	@Transient
+	@Temporal(TemporalType.TIMESTAMP)	
+	@Column(name="RIGHTS_START_DATE")
 	private Date startDate;
 	
 	
-	@Transient
+	@Column(name="RIGHTS_START_DATE_CODE")
 	private String startDateCode;
 	
-	
-	@Transient
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="RIGHTS_END_DATE")
 	private Date endDate;
 	
 
-	@Transient
+	@Column(name="RIGHTS_END_DATE_CODE")
 	private String endDateCode;
 	
 	public Answer() {}
@@ -754,9 +753,9 @@ public class Answer implements Serializable {
 		System.out.println("foxVersionId: " + this.foxVersionId);
 		System.out.println("reasonText: " + this.reasonText);
 		
-		if (this.foxVersionId == null)
+		if (this.foxVersionId == null) {
 			setReasonText("The requested productId: " + this.reqProductId + " was not found.");
-		
+		}
 		return reasonText;
 	}
 

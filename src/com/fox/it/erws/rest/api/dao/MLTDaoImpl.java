@@ -18,9 +18,6 @@ import org.springframework.stereotype.Repository;
 public class MLTDaoImpl implements MLTDao {
 	private Logger log = Logger.getLogger(MLTDaoImpl.class);
 	
-	private List<Long> validMediaIds;
-	private List<Long> validTerritoryIds;
-	private List<Long> validLanguageIds;
 	
 	@PersistenceUnit
 	protected EntityManagerFactory entityManagerFactory;
@@ -33,12 +30,6 @@ public class MLTDaoImpl implements MLTDao {
 	
 	}
 
-	private List<Long> getValidMediaIds() {
-		if (validMediaIds==null) {
-			validMediaIds = findMediaList();
-		}
-		return validMediaIds;
-	}
 	
     public void setEntityManagerFactory(EntityManagerFactory eMF) {
     	entityManagerFactory = eMF;
@@ -49,18 +40,6 @@ public class MLTDaoImpl implements MLTDao {
     }
  
 	
-    public boolean isValidMedia(Long mediaId) {
-    	List<Long> media = getValidMediaIds();
-    	return media.contains(mediaId);
-     }
-    
-    public boolean isValidTerritory(Long territoryId) {
-    	return findTerritoryList().contains(territoryId);
-    }
-    
-    public boolean isValidLanguage(Long languageId) {  	
-    	return findLanguageList().contains(languageId);
-    }
 
 	
 	public List<Long> findMediaList() {

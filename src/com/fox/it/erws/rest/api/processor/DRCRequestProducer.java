@@ -3,6 +3,7 @@ package com.fox.it.erws.rest.api.processor;
 
 import java.util.Collection;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.fox.it.erws.rest.api.dao.AppKeyData;
@@ -14,7 +15,9 @@ import com.fox.it.erws.rest.api.model.drc.response.ProductAnswer;
 
 @Component
 public class DRCRequestProducer  {
-   
+    @Autowired
+	private DRCProcBean drcProcBean;
+	
     public DRCRequestProducer() {}
     
    
@@ -34,7 +37,7 @@ public class DRCRequestProducer  {
 
     	
     	try {    	
-    		answerCollection = new DRCProcBean().harmonize(drcRequest, appKeyData); 
+    		answerCollection = drcProcBean.harmonize(drcRequest, appKeyData); 
     		
     		drcResponse.setResponseId(drcRequest.getResponseId());
     		drcResponse.setAnswer(answerCollection);

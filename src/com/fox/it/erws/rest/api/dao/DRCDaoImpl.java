@@ -173,9 +173,7 @@ public class  DRCDaoImpl implements DRCDao {
 				.getResultList();
 	}
 	
-	public Long findRunId(AppKeyData appKeyData, String consumingApplicationName) {
-		
-		
+	public Long findRunId(String applicationName, Long applicationValue) {
 		EntityManager eM = getEntityManagerFactory().createEntityManager();
 		
 		ProductList productList = null;
@@ -185,7 +183,7 @@ public class  DRCDaoImpl implements DRCDao {
 			
 			productList = (ProductList)eM.createNativeQuery(
 					//"SELECT run_id from app_prod_list_rghts_chk WHERE " + appKeyData.getAppKeyDBName() + " = " + appKeyData.getAppKeyValue() + " and app_nm = '" + consumingApplicationName + "'", ProductList.class)
-					"SELECT run_id from app_prod_list_rghts_chk WHERE PROD_LIST_ID = " + appKeyData.getAppKeyValue() + " and app_nm = '" + consumingApplicationName + "'", ProductList.class)
+					"SELECT run_id from app_prod_list_rghts_chk WHERE PROD_LIST_ID = " + applicationValue + " and app_nm = '" + applicationName + "'", ProductList.class)
 					.getSingleResult(); 
 
 		} catch (Exception e) {
@@ -195,7 +193,9 @@ public class  DRCDaoImpl implements DRCDao {
 		
 		eM.close();
 		return productList.getRunId();
+		
 	}
+	
 	
 	
 	public Long getResponseId() {
@@ -344,7 +344,7 @@ public class  DRCDaoImpl implements DRCDao {
 //	}
 	
 	@SuppressWarnings("unchecked")
-    public Collection<Answer> findAnswer(AppKeyData appKeyData, String consumingApplicationName) {
+    public Collection<Answer> findAnswer(String applicationName,Long applicationValue) {
            EntityManager eM = getEntityManagerFactory().createEntityManager();
            StringBuffer sql = new StringBuffer();
            
@@ -376,12 +376,11 @@ public class  DRCDaoImpl implements DRCDao {
                   
                   
                   answerQuery = (TypedQuery<Answer>) eM.createNativeQuery(sql.toString(), Answer.class)
-                  .setParameter(1, appKeyData.getAppKeyValue())
-                  .setParameter(2, consumingApplicationName);
+                  .setParameter(1, applicationValue)
+                  .setParameter(2, applicationName);
                   
                   answerCollection = answerQuery.getResultList();
                   
-                  System.out.println("consumingApplicationName in the dao: "  + consumingApplicationName);
                   
                   eM.close();
                   
@@ -506,14 +505,15 @@ public class  DRCDaoImpl implements DRCDao {
 	}
 
 
-	public List<Long> findProductIds(AppKeyData appKeyData) {
+	public List<Long> findProductIds(String applicationName,String appKeyFieldName,Long applicationValue) {
         EntityManager eM = getEntityManagerFactory().createEntityManager();
 		
         StringBuffer sql = new StringBuffer();
         sql.append("SELECT distinct c from ConsumingApplicationPOJO c where c.");
-        sql.append(appKeyData.getAppKeyField());
+        sql.append(appKeyFieldName);
         sql.append("=:");
-        sql.append(appKeyData.getAppKeyField());
+        sql.append(appKeyFieldName);
+        sql.append(" and consumingApplicationName=:applicationName");
 
         
 		List<Long> productIdList = new ArrayList<Long>();
@@ -522,7 +522,8 @@ public class  DRCDaoImpl implements DRCDao {
 			
 			Collection<ConsumingApplicationPOJO> consumingApplicationCollection = eM.createQuery(
 					sql.toString(), ConsumingApplicationPOJO.class)
-					.setParameter(appKeyData.getAppKeyField(), appKeyData.getAppKeyValue())
+					.setParameter(appKeyFieldName, applicationValue)
+					.setParameter("applicationName", applicationName)
 					.getResultList();
 			
 			for (ConsumingApplicationPOJO p : consumingApplicationCollection) {
