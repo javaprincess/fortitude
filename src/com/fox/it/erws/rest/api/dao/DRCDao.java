@@ -27,7 +27,7 @@ public interface DRCDao {
 	public <A extends Answer> Collection<A> findAnswer(String applicationName,Long applicationValue);
 	public <K extends ConsumingApplication> void rightsCheck(Long appKeyValue, String withinThroughoutFlag, String consumingApplicationName);
 	
-	public List<Long> findProductIds(String applicationName,String applicationKeyFieldName,Long applicationValue);
+//	public List<Long> findProductIds(String applicationName,String applicationKeyFieldName,Long applicationValue);
 	public boolean isRightsCheckRequired(DRCRightsCheckRequiredRequest DRCRightsCheckRequiredRequest,Long appKeyValue);
 	public List<AppControlParamRequiredFields> findAllAppControlParamRequiredFields(String appName);
 	public List<AppControlParamRequiredFields> findAllAppControlParamRequiredFields(String appName, AskType askType);
