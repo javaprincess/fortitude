@@ -11,12 +11,15 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceUnit;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.apache.log4j.Logger;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Repository;
+
+
 
 import com.fox.it.erws.rest.api.datasource.DRCStoredProcedure;
 import com.fox.it.erws.rest.api.model.drc.DRCRightsCheckRequiredRequest;
@@ -27,12 +30,16 @@ import com.fox.it.erws.rest.api.pojos.ConsumingApplicationPOJO;
 import com.fox.it.erws.rest.api.pojos.ProductList;
 import com.fox.it.erws.rest.api.pojos.RightsCheckDetail;
 import com.fox.it.erws.rest.api.pojos.RightsCheckRestrictionDetail;
+import com.fox.it.erws.rest.api.util.IdsUtil;
 import com.fox.it.erws.rest.api.validation.AskType;
+import com.google.common.collect.Lists;
 
 
 @Repository
 public class  DRCDaoImpl implements DRCDao {
 	private Logger log = Logger.getLogger(DRCDaoImpl.class);
+	
+	private static final int IN_LIMIT =1000;	
 	
 	@PersistenceUnit
 	protected EntityManagerFactory entityManagerFactory;
@@ -151,6 +158,7 @@ public class  DRCDaoImpl implements DRCDao {
 	public void save(Collection<ConsumingApplicationPOJO> pojoCollection) {
 		EntityManager eM = getEntityManagerFactory().createEntityManager();
 		try {
+			//TODO clean transactions
 			eM.getTransaction().begin();
 			
 			create(pojoCollection, eM);
@@ -513,7 +521,7 @@ public class  DRCDaoImpl implements DRCDao {
         sql.append(appKeyFieldName);
         sql.append("=:");
         sql.append(appKeyFieldName);
-        sql.append(" and consumingApplicationName=:applicationName");
+        sql.append(" and c.consumingApplicationName=:applicationName");
 
         
 		List<Long> productIdList = new ArrayList<Long>();
@@ -526,6 +534,8 @@ public class  DRCDaoImpl implements DRCDao {
 					.setParameter("applicationName", applicationName)
 					.getResultList();
 			
+			//TODO this is wrong!!!!
+			//there's no guarantee that the client will provide productId
 			for (ConsumingApplicationPOJO p : consumingApplicationCollection) {
 				productIdList.add(p.getReqProductId());
 			}
@@ -533,11 +543,65 @@ public class  DRCDaoImpl implements DRCDao {
 			eM.close();
 			
 		} catch (Exception e) {
-			System.out.println("Error in DRCDao.findProductIds(): " + e.getMessage());
+			e.printStackTrace();
 		}
 		
 		return productIdList;
     }
+	
+	
+	private List<RightsCheckDetail> getRightsCheckDetailByQueryIdsInBatch(List<Long> ids) {
+		if (ids==null||ids.isEmpty()) {
+			return new ArrayList<RightsCheckDetail>();
+		}
+        EntityManager eM = getEntityManagerFactory().createEntityManager();		
+		String sql = "Select * from RGHTS_CHK_DTL where QRY_ID in " + IdsUtil.getIdsAsListInParenthesis(ids);
+		Query q = eM.createNativeQuery(sql, RightsCheckDetail.class);
+		List<RightsCheckDetail> details = q.getResultList();
+		return details;		
+	}
+	
+	private List<RightsCheckRestrictionDetail> getRightsCheckRestrictionDetailByQueryIdsInBatch(List<Long> ids) {
+		if (ids==null||ids.isEmpty()) {
+			return new ArrayList<RightsCheckRestrictionDetail>();
+		}
+        EntityManager eM = getEntityManagerFactory().createEntityManager();		
+		String sql = "Select * from RGHTS_RSTRCN_CD_CHK_DTL where QRY_ID in " + IdsUtil.getIdsAsListInParenthesis(ids);
+		Query q = eM.createNativeQuery(sql, RightsCheckRestrictionDetail.class);
+		List<RightsCheckRestrictionDetail> details = q.getResultList();
+		return details;		
+	}
+	
+	
+	public List<RightsCheckDetail> getRightsCheckDetailByQueryIds(List<Long> ids) {
+		List<RightsCheckDetail> details = new ArrayList<>(ids==null?0:ids.size());
+		if (ids==null||ids.size()==0) return details;
+		if (ids.size()<=IN_LIMIT) {
+			details=getRightsCheckDetailByQueryIdsInBatch(ids);
+		} else {
+			List<List<Long>> splittedIds = Lists.partition(ids, IN_LIMIT);
+			for (List<Long> batchIds: splittedIds) {
+				details.addAll(getRightsCheckDetailByQueryIdsInBatch(batchIds));
+			}
+		}		
+		return details;		
+		
+	}
+	
+	public List<RightsCheckRestrictionDetail> findRightsCheckRestrictionDetailByQueryIds(List<Long> ids) {
+		List<RightsCheckRestrictionDetail> details = new ArrayList<>(ids==null?0:ids.size());
+		if (ids==null||ids.size()==0) return details;
+		if (ids.size()<=IN_LIMIT) {
+			details=getRightsCheckRestrictionDetailByQueryIdsInBatch(ids);
+		} else {
+			List<List<Long>> splittedIds = Lists.partition(ids, IN_LIMIT);
+			for (List<Long> batchIds: splittedIds) {
+				details.addAll(getRightsCheckRestrictionDetailByQueryIdsInBatch(batchIds));
+			}
+		}		
+		return details;		
+		
+	}
 
 
 }

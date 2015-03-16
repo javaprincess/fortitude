@@ -33,11 +33,10 @@ public class DRCRequestProducer  {
     		AppKeyData appKeyData) {
 
 		DRCResponse<ProductAnswer> drcResponse = new DRCResponse<ProductAnswer>();		
-    	Collection<ProductAnswer> answerCollection = null;
 
     	
     	try {    	
-    		answerCollection = drcProcBean.harmonize(drcRequest, appKeyData); 
+    		Collection<ProductAnswer> answerCollection = drcProcBean.harmonize(drcRequest, appKeyData); 
     		
     		drcResponse.setResponseId(drcRequest.getResponseId());
     		drcResponse.setAnswer(answerCollection);

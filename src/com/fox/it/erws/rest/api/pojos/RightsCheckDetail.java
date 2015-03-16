@@ -58,7 +58,7 @@ public class RightsCheckDetail implements Serializable {
 	 private String checkPassFlag;
 	
 	@Transient
-	private Collection<RightsCheckRestrictionDetailDTO> rightsCheckRestrictionDetail;
+	private Collection<RightsCheckRestrictionDetail> rightsCheckRestrictionDetail;
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
@@ -165,29 +165,43 @@ public class RightsCheckDetail implements Serializable {
 		this.checkPassFlag = checkPassFlag;
 	}
 
-	public Collection<RightsCheckRestrictionDetailDTO> getRightsCheckRestrictionDetail() {
-		return this.rightsCheckRestrictionDetail;
-	}
-	
-	public void setRightsCheckRestrictionDetail(Collection<RightsCheckRestrictionDetail> rightsCheckRestrictionDetail) {
-		//this.rightsCheckRestrictionDetail = rightsCheckRestrictionDetail;
-		
-		Collection<RightsCheckRestrictionDetailDTO> newCollection = new ArrayList<RightsCheckRestrictionDetailDTO>();
-		
-		Iterator<RightsCheckRestrictionDetail> rCDIter = rightsCheckRestrictionDetail.iterator();
-		while (rCDIter.hasNext()) {
-			RightsCheckRestrictionDetail rCD = rCDIter.next();
-			RightsCheckRestrictionDetailDTO newRCD = new RightsCheckRestrictionDetailDTO();
-			newRCD.setQueryId(rCD.getQueryId());
-			newRCD.setFoxVersionId(rCD.getFoxVersionId());
-			newRCD.setRightsRestrictionCodeCheckDetailId(rCD.getRightsRestrictionCodeCheckDetailId());
-			newRCD.setPassFailCheckId(rCD.getPassFailCheckId());
-			newRCD.setConditionPassFlag(rCD.getConditionPassFlag());
-			newRCD.setRestrictionCodeId(rCD.getRestrictionCodeId());
-			newCollection.add(newRCD);
+	public Collection<RightsCheckRestrictionDetail> getRightsCheckRestrictionDetail() {
+		if (rightsCheckRestrictionDetail==null) {
+			rightsCheckRestrictionDetail = new ArrayList<>();
 		}
-		
-		this.rightsCheckRestrictionDetail = newCollection;
+		return rightsCheckRestrictionDetail;
 	}
+
+	public void setRightsCheckRestrictionDetail(
+			Collection<RightsCheckRestrictionDetail> rightsCheckRestrictionDetail) {
+		this.rightsCheckRestrictionDetail = rightsCheckRestrictionDetail;
+	}
+
+	
+	
+//	public Collection<RightsCheckRestrictionDetailDTO> getRightsCheckRestrictionDetail() {
+//		return this.rightsCheckRestrictionDetail;
+//	}
+	
+//	public void setRightsCheckRestrictionDetail(Collection<RightsCheckRestrictionDetail> rightsCheckRestrictionDetail) {
+//		//this.rightsCheckRestrictionDetail = rightsCheckRestrictionDetail;
+//		
+//		Collection<RightsCheckRestrictionDetailDTO> newCollection = new ArrayList<RightsCheckRestrictionDetailDTO>();
+//		
+//		Iterator<RightsCheckRestrictionDetail> rCDIter = rightsCheckRestrictionDetail.iterator();
+//		while (rCDIter.hasNext()) {
+//			RightsCheckRestrictionDetail rCD = rCDIter.next();
+//			RightsCheckRestrictionDetailDTO newRCD = new RightsCheckRestrictionDetailDTO();
+//			newRCD.setQueryId(rCD.getQueryId());
+//			newRCD.setFoxVersionId(rCD.getFoxVersionId());
+//			newRCD.setRightsRestrictionCodeCheckDetailId(rCD.getRightsRestrictionCodeCheckDetailId());
+//			newRCD.setPassFailCheckId(rCD.getPassFailCheckId());
+//			newRCD.setConditionPassFlag(rCD.getConditionPassFlag());
+//			newRCD.setRestrictionCodeId(rCD.getRestrictionCodeId());
+//			newCollection.add(newRCD);
+//		}
+//		
+//		this.rightsCheckRestrictionDetail = newCollection;
+//	}
 	
 }

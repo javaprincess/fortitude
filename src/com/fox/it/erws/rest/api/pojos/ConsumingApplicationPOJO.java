@@ -103,10 +103,10 @@ public class ConsumingApplicationPOJO implements Serializable {
 
 	@Column(name="APP_NM")
 	private String consumingApplicationName;
-	
-	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-	@JoinColumn(name="APP_RGHTS_CHK_REQ_ID",insertable=false, updatable=false)
-	private Answer answer;
+	//AMV 3/15/2015
+//	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+//	@JoinColumn(name="APP_RGHTS_CHK_REQ_ID",insertable=false, updatable=false)
+//	private Answer answer;
 	
 	@Transient
 	private Long runId;

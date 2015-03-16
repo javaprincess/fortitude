@@ -78,148 +78,148 @@ public class Normalizer {
 		   
 	   }
 	   
-	   private Answer setAnswerDetails(Answer answerElement, DRCDao drcDao) {
-		   Answer answer = answerElement;
-		   
-		   Long queryId = answer.getQueryId();
-		   if (queryId != null) {
-			   Collection<RightsCheckDetail> rightsCheckDetail = drcDao.findRightsCheckDetail(answer.getQueryId());
-		   
-			   Iterator<RightsCheckDetail> rightsCheckDetailIter = rightsCheckDetail.iterator();
-			   while (rightsCheckDetailIter.hasNext()) {
-
-				   RightsCheckDetail rCD = rightsCheckDetailIter.next();
-			   
-				   rCD.setRightsCheckRestrictionDetail(drcDao.findRightsCheckRestrictionDetail(answer.getQueryId()));
-			   
-				   answer.setRightsCheckDetail(rightsCheckDetail);
-			   }
-		   }
-		  
-		   return answer;
-	   }
+//	   private Answer setAnswerDetails(Answer answerElement, DRCDao drcDao) {
+//		   Answer answer = answerElement;
+//		   
+//		   Long queryId = answer.getQueryId();
+//		   if (queryId != null) {
+//			   Collection<RightsCheckDetail> rightsCheckDetail = drcDao.findRightsCheckDetail(answer.getQueryId());
+//		   
+//			   Iterator<RightsCheckDetail> rightsCheckDetailIter = rightsCheckDetail.iterator();
+//			   while (rightsCheckDetailIter.hasNext()) {
+//
+//				   RightsCheckDetail rCD = rightsCheckDetailIter.next();
+//			   
+//				   rCD.setRightsCheckRestrictionDetail(drcDao.findRightsCheckRestrictionDetail(answer.getQueryId()));
+//			   
+//				   answer.setRightsCheckDetail(rightsCheckDetail);
+//			   }
+//		   }
+//		  
+//		   return answer;
+//	   }
 	   
 
-		public Collection<ProductAnswer> normalize(Collection<Product> productList, 
-				Collection<Answer> dbAnswerCollection, 
-				DRCDao drcDao) {
-			
-			Collection<ProductAnswer> productAnswerCollection = new ArrayList<ProductAnswer>();
-			
-			ProductAnswer productAnswer  =  null;
-			
-			Long previousPiD = null;
-			Long currentPiD = null;
-			
-			Long currentFvId = 0L;
-			Long previousFvId = 0L;
-			Long currentFiD = 0L;
-			Long previousFiD = 0L;
-			String currentFPiD = null;
-			String previousFPiD = null;
-			
-			
-			List<Answer> answerElementList = null;
-			int collectionSize = dbAnswerCollection.size();
-			int collectionCounter = 0;
-			
-			for (Answer answerElement : dbAnswerCollection) {
-				
-					//TODO: check the DB config to determine if app wants the fat answer or the skinny answer
-					answerElement = setAnswerDetails(answerElement, drcDao);
-					
-					collectionCounter++;
-		
-					//TODO figure out why is this a string
-					currentPiD = answerElement.getReqProductId();
-					currentFvId = answerElement.getReqFoxVersionId();
-					currentFiD = answerElement.getReqFoxId();
-					currentFPiD = answerElement.getReqFinProdId();
-					
-					
-					
-					if (previousPiD == null) {//create a new List
-						answerElementList = new ArrayList<Answer>();
-						answerElementList.add(answerElement);
-						previousPiD = currentPiD;
-						previousFvId = currentFvId;
-						previousFiD = currentFiD;
-						previousFPiD = currentFPiD;
-						
-						System.out.println("answerElementList.size() in init: " + answerElementList.size());
-						
-						//if no more elements, add to the collection
-						if (collectionCounter == collectionSize) {
-							System.out.println("we are at the end -- reqFoxVersionId: " + answerElement.getReqFoxVersionId());
-							productAnswer = new ProductAnswer(currentPiD, 
-									currentFvId,
-									currentFiD,
-									currentFPiD,
-									answerElementList); 
-							productAnswerCollection.add(productAnswer);
-						}
-							
-					} else if (previousPiD.equals(currentPiD)) {
-						previousPiD = currentPiD;
-						previousFvId = currentFvId;
-						previousFiD = currentFiD;
-						previousFPiD = currentFPiD;
-						
-						answerElementList.add(answerElement);
-						System.out.println("answerElementList.size() in equality: " + answerElementList.size());
-						
-						//if no more elements, add to the collection
-						if (collectionCounter == collectionSize) {
-							
-							productAnswer = new ProductAnswer(currentPiD, 
-									currentFvId,
-									currentFiD,
-									currentFPiD,
-									answerElementList);
-							
-							System.out.println("we are at the 2nd end productAnswer: " + productAnswer.toString());
-							productAnswerCollection.add(productAnswer);
-						}
-					} else {
-						//save the old list
-						productAnswer = new ProductAnswer(previousPiD, 
-								previousFvId,
-								previousFiD,
-								previousFPiD,
-								answerElementList);
-						
-						productAnswerCollection.add(productAnswer);
-						
-						//the pids don't equal, but we are at the end of the list
-						//start a new list for the new PiD
-						answerElementList = new ArrayList<Answer>();
-						answerElementList.add(answerElement);
-						
-						//let's set previous to current
-						previousPiD = currentPiD;
-						previousFvId = currentFvId;
-						previousFiD = currentFiD;
-						previousFPiD = currentFPiD;
-			
-						
-						if (collectionCounter == collectionSize) {
-							
-							productAnswer = new ProductAnswer(currentPiD, 
-									currentFvId,
-									currentFiD,
-									currentFPiD,
-									answerElementList);
-							
-							System.out.println("we are at the 2nd end productAnswer: " + productAnswer.toString());
-							productAnswerCollection.add(productAnswer);
-						}
-						
-					}
-					
-					
-			} //for
-			
-			return productAnswerCollection;
-	}
+//		public Collection<ProductAnswer> normalize(Collection<Product> productList, 
+//				Collection<Answer> dbAnswerCollection, 
+//				DRCDao drcDao) {
+//			
+//			Collection<ProductAnswer> productAnswerCollection = new ArrayList<ProductAnswer>();
+//			
+//			ProductAnswer productAnswer  =  null;
+//			
+//			Long previousPiD = null;
+//			Long currentPiD = null;
+//			
+//			Long currentFvId = 0L;
+//			Long previousFvId = 0L;
+//			Long currentFiD = 0L;
+//			Long previousFiD = 0L;
+//			String currentFPiD = null;
+//			String previousFPiD = null;
+//			
+//			
+//			List<Answer> answerElementList = null;
+//			int collectionSize = dbAnswerCollection.size();
+//			int collectionCounter = 0;
+//			
+//			for (Answer answerElement : dbAnswerCollection) {
+//				
+//					//TODO: check the DB config to determine if app wants the fat answer or the skinny answer
+//					answerElement = setAnswerDetails(answerElement, drcDao);
+//					
+//					collectionCounter++;
+//		
+//					//TODO figure out why is this a string
+//					currentPiD = answerElement.getReqProductId();
+//					currentFvId = answerElement.getReqFoxVersionId();
+//					currentFiD = answerElement.getReqFoxId();
+//					currentFPiD = answerElement.getReqFinProdId();
+//					
+//					
+//					
+//					if (previousPiD == null) {//create a new List
+//						answerElementList = new ArrayList<Answer>();
+//						answerElementList.add(answerElement);
+//						previousPiD = currentPiD;
+//						previousFvId = currentFvId;
+//						previousFiD = currentFiD;
+//						previousFPiD = currentFPiD;
+//						
+//						System.out.println("answerElementList.size() in init: " + answerElementList.size());
+//						
+//						//if no more elements, add to the collection
+//						if (collectionCounter == collectionSize) {
+//							System.out.println("we are at the end -- reqFoxVersionId: " + answerElement.getReqFoxVersionId());
+//							productAnswer = new ProductAnswer(currentPiD, 
+//									currentFvId,
+//									currentFiD,
+//									currentFPiD,
+//									answerElementList); 
+//							productAnswerCollection.add(productAnswer);
+//						}
+//							
+//					} else if (previousPiD.equals(currentPiD)) {
+//						previousPiD = currentPiD;
+//						previousFvId = currentFvId;
+//						previousFiD = currentFiD;
+//						previousFPiD = currentFPiD;
+//						
+//						answerElementList.add(answerElement);
+//						System.out.println("answerElementList.size() in equality: " + answerElementList.size());
+//						
+//						//if no more elements, add to the collection
+//						if (collectionCounter == collectionSize) {
+//							
+//							productAnswer = new ProductAnswer(currentPiD, 
+//									currentFvId,
+//									currentFiD,
+//									currentFPiD,
+//									answerElementList);
+//							
+//							System.out.println("we are at the 2nd end productAnswer: " + productAnswer.toString());
+//							productAnswerCollection.add(productAnswer);
+//						}
+//					} else {
+//						//save the old list
+//						productAnswer = new ProductAnswer(previousPiD, 
+//								previousFvId,
+//								previousFiD,
+//								previousFPiD,
+//								answerElementList);
+//						
+//						productAnswerCollection.add(productAnswer);
+//						
+//						//the pids don't equal, but we are at the end of the list
+//						//start a new list for the new PiD
+//						answerElementList = new ArrayList<Answer>();
+//						answerElementList.add(answerElement);
+//						
+//						//let's set previous to current
+//						previousPiD = currentPiD;
+//						previousFvId = currentFvId;
+//						previousFiD = currentFiD;
+//						previousFPiD = currentFPiD;
+//			
+//						
+//						if (collectionCounter == collectionSize) {
+//							
+//							productAnswer = new ProductAnswer(currentPiD, 
+//									currentFvId,
+//									currentFiD,
+//									currentFPiD,
+//									answerElementList);
+//							
+//							System.out.println("we are at the 2nd end productAnswer: " + productAnswer.toString());
+//							productAnswerCollection.add(productAnswer);
+//						}
+//						
+//					}
+//					
+//					
+//			} //for
+//			
+//			return productAnswerCollection;
+//	}
 
 }

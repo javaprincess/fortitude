@@ -1,10 +1,8 @@
 package com.fox.it.erws.rest.api.pojos;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -136,8 +133,8 @@ public class Answer implements Serializable {
 //	@JoinColumn(name="APP_RGHTS_CHK_REQ_ID", insertable=false, updatable=false)
 //	private ConsumingApplicationPOJO consumingApplication;
 	
-	@Transient
-	private Collection<RightsCheckDetailDTO> rightsCheckDetail;
+//	@Transient
+	private Collection<RightsCheckDetail> rightsCheckDetail;
 	
 	@Column(name="MOT_INFO_CODES")
 	private String  motRestrictionCodes;
@@ -284,31 +281,37 @@ public class Answer implements Serializable {
 		setRestrictionCodes(restrictionCodes);
 	}
 	
-	public void setRightsCheckDetail(Collection<RightsCheckDetail> rightsCheckDetail) {
-		
-		Collection<RightsCheckDetailDTO> newCollection = new ArrayList<RightsCheckDetailDTO>();
-		
-		Iterator<RightsCheckDetail> rCDIter = rightsCheckDetail.iterator();
-		while (rCDIter.hasNext()) {
-			RightsCheckDetail rCD = rCDIter.next();
-			RightsCheckDetailDTO newRCD = new RightsCheckDetailDTO();
-			newRCD.setComment(rCD.getComment());
-			newRCD.setQueryId(rCD.getQueryId());
-			newRCD.setFoxVersionId(rCD.getFoxVersionId());
-			newRCD.setRightsCheckDetailId(rCD.getRightsCheckDetailId());
-			newRCD.setPassFailCheckId(rCD.getPassFailCheckId());
-			newRCD.setCheckPassFlag(rCD.getCheckPassFlag());
-			newRCD.setRightsCheckRestrictionDetailDTO((rCD.getRightsCheckRestrictionDetail()));
-			
-			newCollection.add(newRCD);
-		}
-		
-		this.rightsCheckDetail = newCollection;
-		
-		
-	}
 	
-	public Collection<RightsCheckDetailDTO> getRightsCheckDetail() {
+	
+//	public void setRightsCheckDetail(Collection<RightsCheckDetail> rightsCheckDetail) {
+//		if (rightsCheckDetail==null) return;		
+//		Collection<RightsCheckDetailDTO> newCollection = new ArrayList<RightsCheckDetailDTO>();
+//
+//		Iterator<RightsCheckDetail> rCDIter = rightsCheckDetail.iterator();
+//		while (rCDIter.hasNext()) {
+//			RightsCheckDetail rCD = rCDIter.next();
+//			RightsCheckDetailDTO newRCD = new RightsCheckDetailDTO();
+//			newRCD.setComment(rCD.getComment());
+//			newRCD.setQueryId(rCD.getQueryId());
+//			newRCD.setFoxVersionId(rCD.getFoxVersionId());
+//			newRCD.setRightsCheckDetailId(rCD.getRightsCheckDetailId());
+//			newRCD.setPassFailCheckId(rCD.getPassFailCheckId());
+//			newRCD.setCheckPassFlag(rCD.getCheckPassFlag());
+//			newRCD.setRightsCheckRestrictionDetailDTO((rCD.getRightsCheckRestrictionDetail()));
+//			
+//			newCollection.add(newRCD);
+//		}
+//		
+//		this.rightsCheckDetail = newCollection;
+//		
+//		
+//	}
+	
+	public void setRightsCheckDetail(Collection<RightsCheckDetail> rightsCheckDetail) {
+		this.rightsCheckDetail = rightsCheckDetail;
+	}
+
+	public Collection<RightsCheckDetail> getRightsCheckDetail() {
 		return this.rightsCheckDetail;
 	}
 	

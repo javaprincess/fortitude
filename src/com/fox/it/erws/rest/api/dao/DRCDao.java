@@ -32,4 +32,7 @@ public interface DRCDao {
 	public List<AppControlParamRequiredFields> findAllAppControlParamRequiredFields(String appName);
 	public List<AppControlParamRequiredFields> findAllAppControlParamRequiredFields(String appName, AskType askType);
 	
+	public List<RightsCheckDetail> getRightsCheckDetailByQueryIds(List<Long> ids);
+	public List<RightsCheckRestrictionDetail> findRightsCheckRestrictionDetailByQueryIds(List<Long> ids);	
+	
 }
