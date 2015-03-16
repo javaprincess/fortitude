@@ -8,7 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 
-import org.apache.log4j.Logger;
+
 import org.springframework.stereotype.Repository;
 
 
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class MLTDaoImpl implements MLTDao {
-	private Logger log = Logger.getLogger(MLTDaoImpl.class);
+
 	
 	
 	@PersistenceUnit
@@ -55,16 +55,11 @@ public class MLTDaoImpl implements MLTDao {
 		sql.append(activeFlag);
 		sql.append("\'");
 		
-		try {
+		mediaList =  eM.createQuery(
+		//All Media has a mediaId of 16; get only active media
+		sql.toString(), Long.class)
+		.getResultList();
 			
-			mediaList =  eM.createQuery(
-			//All Media has a mediaId of 16; get only active media
-			sql.toString(), Long.class)
-			.getResultList();
-			
-		} catch (Exception e) {
-			log.error("Error in MTLDao.findMedia(): " + e.getMessage());
-		}
 		
 		eM.close();
 		
@@ -84,17 +79,11 @@ public class MLTDaoImpl implements MLTDao {
 		sql.append("and t.activeFlag = \'");
 		sql.append(activeFlag);
 		sql.append("\'");
-		
-		
-		try {
-			territoryList = eM.createQuery(
-					//WW has a territoryId of 537; get only active territories
-					sql.toString(), Long.class)
-					.getResultList(); 
+		territoryList = eM.createQuery(
+				//WW has a territoryId of 537; get only active territories
+				sql.toString(), Long.class)
+				.getResultList(); 
 
-		} catch (Exception e) {
-			log.error("Error in MTLDao.findTerritory(): " + e.getMessage());
-		}
 		
 		eM.close();
 		
@@ -115,14 +104,10 @@ public class MLTDaoImpl implements MLTDao {
 		sql.append(activeFlag);
 		sql.append("\'");
 		
-		try {
-			languageList = eM.createQuery(
-					//All Language has a languageId of 2; get only active languages
-					sql.toString(), Long.class)
-					.getResultList(); 
-			} catch (Exception e) {
-			log.error("Error in MTLDao.findLanguage(): " + e.getMessage());
-		}
+		languageList = eM.createQuery(
+				//All Language has a languageId of 2; get only active languages
+				sql.toString(), Long.class)
+				.getResultList(); 
 		
 		eM.close();
 		
