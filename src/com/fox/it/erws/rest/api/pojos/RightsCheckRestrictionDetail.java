@@ -10,6 +10,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="RGHTS_RSTRCN_CD_CHK_DTL")
 public class RightsCheckRestrictionDetail implements Serializable {
@@ -56,7 +58,7 @@ public class RightsCheckRestrictionDetail implements Serializable {
 	@Column(name="RSTRCN_CD_ID")
 	 private Long restrictionCodeId;
 
-	
+	@JsonIgnore
 	public Date getCreateDate() {
 		return createDate;
 	}
@@ -65,6 +67,7 @@ public class RightsCheckRestrictionDetail implements Serializable {
 		this.createDate = createDate;
 	}
 
+	@JsonIgnore	
 	public String getCreateName() {
 		return createName;
 	}
@@ -73,6 +76,7 @@ public class RightsCheckRestrictionDetail implements Serializable {
 		this.createName = createName;
 	}
 
+	@JsonIgnore	
 	public Date getUpdateDate() {
 		return updateDate;
 	}
@@ -81,6 +85,7 @@ public class RightsCheckRestrictionDetail implements Serializable {
 		this.updateDate = updateDate;
 	}
 
+	@JsonIgnore	
 	public String getUpdateName() {
 		return updateName;
 	}

@@ -1,10 +1,9 @@
 package com.fox.it.erws.rest.api.pojos;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +12,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
@@ -84,6 +85,7 @@ public class RightsCheckDetail implements Serializable {
 		 return result.toString();
 	}
 
+	@JsonIgnore	
 	public Date getCreateDate() {
 		return createDate;
 	}
@@ -100,6 +102,7 @@ public class RightsCheckDetail implements Serializable {
 		this.createName = createName;
 	}
 
+	@JsonIgnore
 	public Date getUpdateDate() {
 		return updateDate;
 	}
@@ -108,6 +111,7 @@ public class RightsCheckDetail implements Serializable {
 		this.updateDate = updateDate;
 	}
 
+	@JsonIgnore	
 	public String getUpdateName() {
 		return updateName;
 	}
@@ -179,29 +183,5 @@ public class RightsCheckDetail implements Serializable {
 
 	
 	
-//	public Collection<RightsCheckRestrictionDetailDTO> getRightsCheckRestrictionDetail() {
-//		return this.rightsCheckRestrictionDetail;
-//	}
-	
-//	public void setRightsCheckRestrictionDetail(Collection<RightsCheckRestrictionDetail> rightsCheckRestrictionDetail) {
-//		//this.rightsCheckRestrictionDetail = rightsCheckRestrictionDetail;
-//		
-//		Collection<RightsCheckRestrictionDetailDTO> newCollection = new ArrayList<RightsCheckRestrictionDetailDTO>();
-//		
-//		Iterator<RightsCheckRestrictionDetail> rCDIter = rightsCheckRestrictionDetail.iterator();
-//		while (rCDIter.hasNext()) {
-//			RightsCheckRestrictionDetail rCD = rCDIter.next();
-//			RightsCheckRestrictionDetailDTO newRCD = new RightsCheckRestrictionDetailDTO();
-//			newRCD.setQueryId(rCD.getQueryId());
-//			newRCD.setFoxVersionId(rCD.getFoxVersionId());
-//			newRCD.setRightsRestrictionCodeCheckDetailId(rCD.getRightsRestrictionCodeCheckDetailId());
-//			newRCD.setPassFailCheckId(rCD.getPassFailCheckId());
-//			newRCD.setConditionPassFlag(rCD.getConditionPassFlag());
-//			newRCD.setRestrictionCodeId(rCD.getRestrictionCodeId());
-//			newCollection.add(newRCD);
-//		}
-//		
-//		this.rightsCheckRestrictionDetail = newCollection;
-//	}
 	
 }
