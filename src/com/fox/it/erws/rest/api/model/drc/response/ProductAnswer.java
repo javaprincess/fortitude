@@ -1,6 +1,7 @@
 package com.fox.it.erws.rest.api.model.drc.response;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fox.it.erws.rest.api.pojos.Answer;
@@ -30,21 +31,23 @@ public class ProductAnswer implements Serializable {
 	}
 	
 	
+	
+	
 	public String getReqFinProdId() {
 		return this.reqFinProdId;
 	}
 	
-	private void setReqFinProdId(String reqFinProdId) {
+	public void setReqFinProdId(String reqFinProdId) {
 		this.reqFinProdId = reqFinProdId;
 		
 	}
 	
-	private void setReqFoxVersionId(Long reqFoxVersionId) {
+	public void setReqFoxVersionId(Long reqFoxVersionId) {
 		this.reqFoxVersionId = reqFoxVersionId;
 		
 	}
 	
-	private void setReqFoxId(Long reqFoxId) {
+	public void setReqFoxId(Long reqFoxId) {
 		this.reqFoxId = reqFoxId;
 	}
 	
@@ -63,6 +66,9 @@ public class ProductAnswer implements Serializable {
 		this.reqProductId = reqProductId;
 	} 
 	public List<Answer> getStrands() {
+		if (strands==null) {
+			strands = new ArrayList<>();
+		}
 		return strands;
 	}
 	public void setStrands(List<Answer> answerElementList) {
