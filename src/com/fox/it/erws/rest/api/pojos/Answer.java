@@ -1,23 +1,20 @@
 package com.fox.it.erws.rest.api.pojos;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -71,10 +68,12 @@ public class Answer implements Serializable {
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="FROM_DT")
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", timezone="PST")	
 	private Date fromDate;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="TO_DT")
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", timezone="PST")
 	private Date toDate;
 	
 	@Column(name="MEDIA_ID")
@@ -173,6 +172,7 @@ public class Answer implements Serializable {
 	
 	@Temporal(TemporalType.TIMESTAMP)	
 	@Column(name="RIGHTS_START_DATE")
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", timezone="PST")
 	private Date startDate;
 	
 	
@@ -181,6 +181,7 @@ public class Answer implements Serializable {
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="RIGHTS_END_DATE")
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", timezone="PST")	
 	private Date endDate;
 	
 
@@ -313,8 +314,6 @@ public class Answer implements Serializable {
 	
 	private void setReqFoxId(Long reqFoxId) {
 		this.reqFoxId = reqFoxId;
-		// TODO Auto-generated method stub
-		
 	}
 	
 	private void setTitleListId(Long titleListId) {
@@ -328,7 +327,6 @@ public class Answer implements Serializable {
 	
 	private void setReqFinProdId(String reqFinProdId) {
 		this.reqFinProdId = reqFinProdId;
-		// TODO Auto-generated method stub
 		
 	}
 	
@@ -337,7 +335,6 @@ public class Answer implements Serializable {
 	}
 
 	public void setMotRestrictionCodes(String motRestrictionCodes) {
-		// TODO Auto-generated method stub
 		this.motRestrictionCodes = motRestrictionCodes;
 		
 	}
@@ -349,7 +346,6 @@ public class Answer implements Serializable {
 	}
 
 	public void setGeneralRestrictionCodes(String generalRestrictionCodes) {
-		// TODO Auto-generated method stub
 		this.generalRestrictionCodes = generalRestrictionCodes;
 		
 	}
@@ -363,7 +359,8 @@ public class Answer implements Serializable {
 		this.endDate = endDate;
 		
 	}
-	
+
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", timezone="PST")	
 	public Date getEndDate() {
 		return this.endDate;
 	}
@@ -408,28 +405,17 @@ public class Answer implements Serializable {
 		this.appProductListQueryId = appProductListQueryId;
 	}
 
-	//@JsonIgnore
-	//public Date getCreateDate() {
-	//	return createDate;
-	//}
 
 	
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
 
-	//@JsonIgnore
-	//public String getCreateName() {
-	//	return createName;
-	//}
 
 	public void setCreateName(String createName) {
 		this.createName = createName;
 	}
 
-	//public Date getUpdateDate() {
-	//	return updateDate;
-	//}
 
 	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
@@ -492,14 +478,17 @@ public class Answer implements Serializable {
 		this.foxVersionId = foxVersionId;
 	}
 
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", timezone="PST")
 	public Date getFromDate() {
 		return fromDate;
 	}
 
+	
 	public void setFromDate(Date fromDate) {
 		this.fromDate = fromDate;
 	}
 
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", timezone="PST")
 	public Date getToDate() {
 		return toDate;
 	}
@@ -759,6 +748,7 @@ public class Answer implements Serializable {
 		return reasonText;
 	}
 
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", timezone="PST")
 	public Date getStartDate() {
 		return startDate;
 	}
