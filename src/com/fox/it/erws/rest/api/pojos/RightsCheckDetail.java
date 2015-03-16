@@ -94,6 +94,7 @@ public class RightsCheckDetail implements Serializable {
 		this.createDate = createDate;
 	}
 
+	@JsonIgnore
 	public String getCreateName() {
 		return createName;
 	}
