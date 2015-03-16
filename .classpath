@@ -19,5 +19,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/spring-jdbc"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/guavalib"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/log4j"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/jacksonlib"/>
 	<classpathentry kind="output" path="WEB-INF/classes"/>
 </classpath>
