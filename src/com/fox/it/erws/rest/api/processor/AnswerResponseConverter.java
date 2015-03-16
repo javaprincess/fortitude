@@ -27,7 +27,7 @@ public class AnswerResponseConverter {
 	
 	private ProductAnswer getFrom(Answer answer) {
 		List<Answer> answers = new ArrayList<>();
-		ProductAnswer productAnswer = new ProductAnswer(answer.getReqProductId(), answer.getReqProductId(), answer.getReqFoxId(), answer.getReqFinProdId(), answers);
+		ProductAnswer productAnswer = new ProductAnswer(answer.getReqProductId(), answer.getReqFoxVersionId(), answer.getReqFoxId(), answer.getReqFinProdId(), answers);
 		return productAnswer;
 	}
 	
