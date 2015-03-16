@@ -17,5 +17,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/spring-core"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/eclipselink"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/spring-jdbc"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/guavalib"/>
 	<classpathentry kind="output" path="WEB-INF/classes"/>
 </classpath>
