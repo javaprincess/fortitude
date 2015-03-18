@@ -39,16 +39,21 @@ public class DRCProcBean {
 		 
 	 }
 	 
+	 private String getWithinThroughoutFlag(Collection<Title> titleCollection) {
+		 for (Title t: titleCollection) {
+			 return t.getWithinThroughoutFlag();
+		 }
+		 return null;
+	 }
+	 
 	 private void doDrc(DRCRequest drcRequest,Long appKeyValue) {
 		   //withinThroughoutFlag is at the title level.  There is a collection of titles per contract
-		   Collection<Title> titleCollection = drcRequest.getContract().getTitles();
-		   Iterator<Title> titleIter = titleCollection.iterator();
-		   while (titleIter.hasNext()) {
-			   Title title = titleIter.next();
-			   drcDao.rightsCheck(appKeyValue, 
-          		title.getWithinThroughoutFlag(), 
-          		drcRequest.getConsumingApplicationName());
-		   }
+		   String withinThroughoutFlag = getWithinThroughoutFlag(drcRequest.getContract().getTitles());
+		   drcDao.rightsCheck(appKeyValue, 
+				   			  withinThroughoutFlag, 
+				   			  drcRequest.getConsumingApplicationName());
+
+		 
     	
 		   System.out.println("timestamp --> finished rightsCheck for requestId/responseId: " + drcRequest.getRequestId() + "/" + drcRequest.getResponseId() + " : " + ERMTime.getTime());
 	 }

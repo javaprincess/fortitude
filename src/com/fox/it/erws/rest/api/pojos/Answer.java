@@ -60,7 +60,7 @@ public class Answer implements Serializable {
 	@Column(name="MLT_GRP_ID")
 	private Long mltGroupId;
 	
-	@Column(name="FOX_VERSION_ID")
+	@Column(name="REQ_FOX_VERSION_ID")
 	private Long reqFoxVersionId;
 	
 	@Temporal(TemporalType.TIMESTAMP)
@@ -148,7 +148,7 @@ public class Answer implements Serializable {
 	@Column(name="INFO_CODES")
 	private String restrictionCodes;
 	
-	@Column(name="REQ_FOX_VERSION_ID")
+	@Column(name="FOX_VERSION_ID")	
 	private Long foxVersionId;
 	
 	@Column(name="REQ_FOX_ID")
@@ -745,6 +745,7 @@ public class Answer implements Serializable {
 		System.out.println("foxVersionId: " + this.foxVersionId);
 		System.out.println("reasonText: " + this.reasonText);
 		
+		//TODO include which one is the field that was wrong
 		if (this.foxVersionId == null) {
 			setReasonText("The requested productId: " + this.reqProductId + " was not found.");
 		}
@@ -776,5 +777,7 @@ public class Answer implements Serializable {
 		this.reqFoxVersionId = reqFoxVersionId;
 	}
 
+
+	
 	
 }

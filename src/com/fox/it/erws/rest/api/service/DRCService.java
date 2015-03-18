@@ -96,7 +96,7 @@ public class DRCService<T extends MTL, A extends Answer, R extends DRCResponse<A
 		AppKeyAccumulatorVisitor appKeyAccumulator = new AppKeyAccumulatorVisitor();
 		//we have to validate that the applicationName exists in the request and in the DB before we can
 		//process the request. This is the only field that requires this special treatment
-		if ( applicationName == null) 
+		if ( applicationName == null||applicationName.isEmpty()) 
 			return (E) new DRCRequestError<A>("the request field: consumingApplicationName is missing.");
 		else {
 			

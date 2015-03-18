@@ -19,6 +19,8 @@ public class DRCRequest implements Serializable {
 	
 	private Long responseId;
 	
+
+	
 	public DRCRequest() {
 		
 	}
