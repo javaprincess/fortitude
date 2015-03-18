@@ -6,6 +6,8 @@ import java.util.List;
 import com.fox.it.erws.rest.api.dao.DRCDao;
 import com.fox.it.erws.rest.api.model.drc.response.ProductAnswer;
 import com.fox.it.erws.rest.api.pojos.Answer;
+import com.fox.it.erws.rest.api.service.ERWSException;
+import com.google.common.base.CaseFormat;
 
 public  class DRCResponseProducer  {
 	 
@@ -17,7 +19,22 @@ public  class DRCResponseProducer  {
 		 answerResponseConverter = new AnswerResponseConverter(drcDao);		 
 	 }
 
-	 public Collection<ProductAnswer> answerCreation(String applicationName, String applicationFieldName,Long applicationValue) { 
+	 private String getInvalidProductMessage(Answer answer,String titleKeyField) {
+		 Object fieldValue = answer.getRequestedValue(titleKeyField);
+		 String msg = "Product with " + titleKeyField + " = " + fieldValue + " not found";
+		 return msg;
+	 }
+	 
+	 private void validateAnswer(Collection<Answer> answers,String titleKeyField) throws ERWSException {
+		 for (Answer a: answers) {
+			 if (a.getQueryId()==null && a.getFoxVersionId()==null) {
+				 String message = getInvalidProductMessage(a, titleKeyField);
+				 throw new ERWSException(message);
+			 }
+		 }
+	 }
+
+	 public Collection<ProductAnswer> answerCreation(String applicationName, String applicationFieldName,Long applicationValue,String titleKeyField) throws ERWSException { 
 		 // answerCollection = null;
 
 		 Long runId = drcDao.findRunId(applicationName, applicationValue);
@@ -25,7 +42,8 @@ public  class DRCResponseProducer  {
 		
 		 
 		 if (runId > 0) {
-	    	 Collection<Answer> dbAnswerCollection = drcDao.findAnswer(applicationName,applicationValue);
+    	   Collection<Answer> dbAnswerCollection = drcDao.findAnswer(applicationName,applicationValue);
+    	   validateAnswer(dbAnswerCollection,titleKeyField);
 		    
 		
 		   if (dbAnswerCollection.size() > 0) {

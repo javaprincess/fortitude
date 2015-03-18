@@ -4,12 +4,14 @@ public class AppKeyData {
 	private Long appKeyValue;
 	private String appKeyField;
 	private String appKeyDBName;
+	private String titleKeyField;
 	
-	public AppKeyData(Long appKeyValue, String appKeyField, String appKeyDBName) {
+	
+	public AppKeyData(Long appKeyValue, String appKeyField, String appKeyDBName,String titleKeyField) {
 		setAppKeyValue(appKeyValue);
 		setAppKeyField(appKeyField);
 		setAppKeyDBName(appKeyDBName);
-		
+		setTitleKeyField(titleKeyField);
 	}
 	
 	public String getAppKeyDBName() {
@@ -33,6 +35,14 @@ public class AppKeyData {
 		this.appKeyField = appKeyField;
 	}
 	
+	public String getTitleKeyField() {
+		return titleKeyField;
+	}
+
+	public void setTitleKeyField(String titleKeyField) {
+		this.titleKeyField = titleKeyField;
+	}
+
 	public String toString() {
 		 StringBuilder result = new StringBuilder();
 		 String NEW_LINE = System.getProperty("line.separator");

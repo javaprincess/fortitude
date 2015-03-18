@@ -1,7 +1,6 @@
 package com.fox.it.erws.rest.api.processor;
 
 import java.util.Collection;
-import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,7 @@ import com.fox.it.erws.rest.api.model.drc.DRCRequest;
 import com.fox.it.erws.rest.api.model.drc.response.ProductAnswer;
 import com.fox.it.erws.rest.api.pojos.ConsumingApplicationPOJO;
 import com.fox.it.erws.rest.api.pojos.Title;
+import com.fox.it.erws.rest.api.service.ERWSException;
 import com.fox.it.erws.rest.api.util.ERMTime;
 import com.fox.it.erws.rest.api.util.Normalizer;
 
@@ -59,14 +59,14 @@ public class DRCProcBean {
 	 }
 	 
 
-	 private Collection<ProductAnswer> getResponse(String applicationName,String appKeyFieldName,Long applicationValue) {
+	 private Collection<ProductAnswer> getResponse(String applicationName,String appKeyFieldName,Long applicationValue,String titleKeyField) throws ERWSException{
 		 DRCResponseProducer responseProducer = new DRCResponseProducer(drcDao);
-		 return responseProducer.answerCreation(applicationName, appKeyFieldName,applicationValue);
+		 return responseProducer.answerCreation(applicationName, appKeyFieldName,applicationValue,titleKeyField);
 		 
 	 }
 	 
 	 public Collection<ProductAnswer> harmonize(DRCRequest drcRequest, 
-			 AppKeyData appKeyData) {
+			 AppKeyData appKeyData) throws ERWSException {
 		    Long applicationValue = appKeyData.getAppKeyValue(); 
 		    String applicationName = drcRequest.getConsumingApplicationName();
 		    String appKeyFieldName = appKeyData.getAppKeyField();
@@ -76,7 +76,9 @@ public class DRCProcBean {
 		    System.out.println("timestamp --> start rightsCheck for requestId/responseId: " + drcRequest.getRequestId() + "/" + drcRequest.getResponseId() + " : " + ERMTime.getTime());
 		    doDrc(drcRequest, applicationValue);
 		    
-		    Collection<ProductAnswer> response = getResponse(applicationName,appKeyFieldName,applicationValue);
+		    //TODO implement
+		    String titleKeyField = appKeyData.getTitleKeyField();
+		    Collection<ProductAnswer> response = getResponse(applicationName,appKeyFieldName,applicationValue,titleKeyField);
 		    return response;
       }
 

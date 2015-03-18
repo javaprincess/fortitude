@@ -85,13 +85,18 @@ public class DRCService<T extends MTL, A extends Answer, R extends DRCResponse<A
 		return drcRightsCheckRequiredResponse;
 	}
 	
+	private DRCRequestError<?> handleException(ERWSException e) {
+		e.printStackTrace();
+		return new DRCRequestError<Object>(e.getMessage());
+	}
+	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value="/ask", method=RequestMethod.POST)
 	@Valid
 	public @ResponseBody <E extends DRCResponse<? extends A>> E askTheQuestion( @RequestBody DRCRequest drcRequest) {	
 		E drcResponse = null;
 		AskType askType =  AskType.DRC_CHECK;		
-		List<AppControlParamRequiredFields> appControlParamRequiredFieldsList  = drcDao.findAllAppControlParamRequiredFields(drcRequest.getConsumingApplicationName(), askType);
+		List<AppControlParamRequiredFields> appControlParamRequiredFieldsList  = drcDao.findAllAppControlParamRequiredFields(drcRequest.getConsumingApplicationName(), askType); 
 		String applicationName = drcRequest.getConsumingApplicationName();		
 		AppKeyAccumulatorVisitor appKeyAccumulator = new AppKeyAccumulatorVisitor();
 		//we have to validate that the applicationName exists in the request and in the DB before we can
@@ -120,6 +125,8 @@ public class DRCService<T extends MTL, A extends Answer, R extends DRCResponse<A
 				drcRequest.setResponseId(drcDao.getResponseId());
 				drcResponse = (E) drcRequestProducer.processRequest(drcRequest, appKeyData);
 				System.out.println("timestamp --> finish processing the request for requestId/responseId: " + drcRequest.getRequestId() + "/" + drcRequest.getResponseId() + ": " + ERMTime.getTime());
+			} catch (ERWSException e) {
+				return (E) handleException(e);
 			} finally {
 				runningQueries.remove(applicationQuery);
 			}

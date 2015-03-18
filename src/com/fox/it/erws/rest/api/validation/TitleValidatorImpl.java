@@ -20,8 +20,8 @@ public class TitleValidatorImpl extends ObjectGraphValidator {
 		Collection<Title> titleCollection = drcRequest.getContract().getTitles();
 		Iterator<Title> titleIter = titleCollection.iterator();
 		while (titleIter.hasNext() ) {
-			
-			StandardEvaluationContext titleContext = new StandardEvaluationContext(titleIter.next());
+			Title title = titleIter.next();
+			StandardEvaluationContext titleContext = new StandardEvaluationContext(title);
 			
 			Expression exp4 = parser.parseExpression(controlParamObj.getWebServiceRequiredFieldName());
 				

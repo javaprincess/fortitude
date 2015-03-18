@@ -12,6 +12,7 @@ import com.fox.it.erws.rest.api.model.drc.DRCRequest;
 import com.fox.it.erws.rest.api.model.drc.DRCResponse;
 import com.fox.it.erws.rest.api.model.drc.DRCRightsCheckRequiredRequest;
 import com.fox.it.erws.rest.api.model.drc.response.ProductAnswer;
+import com.fox.it.erws.rest.api.service.ERWSException;
 
 @Component
 public class DRCRequestProducer  {
@@ -30,21 +31,17 @@ public class DRCRequestProducer  {
     
 
 	public DRCResponse<ProductAnswer> processRequest(DRCRequest drcRequest,
-    		AppKeyData appKeyData) {
+    		AppKeyData appKeyData) throws ERWSException {
 
 		DRCResponse<ProductAnswer> drcResponse = new DRCResponse<ProductAnswer>();		
-
     	
-    	try {    	
-    		Collection<ProductAnswer> answerCollection = drcProcBean.harmonize(drcRequest, appKeyData); 
+		Collection<ProductAnswer> answerCollection = drcProcBean.harmonize(drcRequest, appKeyData); 
+		
+		drcResponse.setResponseId(drcRequest.getResponseId());
+		drcResponse.setAnswer(answerCollection);
     		
-    		drcResponse.setResponseId(drcRequest.getResponseId());
-    		drcResponse.setAnswer(answerCollection);
     		
-    		
-    	} catch (Exception e) {
-    		e.printStackTrace();
-    	}
+
     	
     	
     	return drcResponse;

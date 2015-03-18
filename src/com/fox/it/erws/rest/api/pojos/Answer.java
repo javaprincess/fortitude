@@ -1,6 +1,7 @@
 package com.fox.it.erws.rest.api.pojos;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.Date;
 
@@ -776,7 +777,23 @@ public class Answer implements Serializable {
 	public void setReqFoxVersionId(Long reqFoxVersionId) {
 		this.reqFoxVersionId = reqFoxVersionId;
 	}
-
+	
+	public Object getRequestedValue(String fieldName) {
+		if ("foxId".equalsIgnoreCase(fieldName)) {
+			return reqFoxId;
+		}
+		if ("foxVersionId".equalsIgnoreCase(fieldName)) {
+			return reqFoxVersionId;
+		}
+		if ("productId".equalsIgnoreCase(fieldName)) {
+			return reqProductId;
+		}
+		if ("finProdId".equalsIgnoreCase(fieldName)) {
+			return reqFinProdId;
+		}
+		return null;
+		
+	}
 
 	
 	
