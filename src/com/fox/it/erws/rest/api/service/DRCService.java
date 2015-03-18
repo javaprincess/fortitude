@@ -92,8 +92,7 @@ public class DRCService<T extends MTL, A extends Answer, R extends DRCResponse<A
 		E drcResponse = null;
 		AskType askType =  AskType.DRC_CHECK;		
 		List<AppControlParamRequiredFields> appControlParamRequiredFieldsList  = drcDao.findAllAppControlParamRequiredFields(drcRequest.getConsumingApplicationName(), askType);
-		String applicationName = drcRequest.getConsumingApplicationName();
-//		AppKeyData appKeyData =  appKeyDataProvider.get(appControlParamRequiredFieldsList);		
+		String applicationName = drcRequest.getConsumingApplicationName();		
 		AppKeyAccumulatorVisitor appKeyAccumulator = new AppKeyAccumulatorVisitor();
 		//we have to validate that the applicationName exists in the request and in the DB before we can
 		//process the request. This is the only field that requires this special treatment
@@ -108,23 +107,24 @@ public class DRCService<T extends MTL, A extends Answer, R extends DRCResponse<A
 			} 
 			AppKeyData appKeyData = appKeyAccumulator.getAppKeyData();
 			System.out.println("after validation appKeyField/appKeyValue: " + appKeyData.getAppKeyField() + "/" + appKeyData.getAppKeyValue());
-		
+
+			//validate that only one request per id is running
 			ApplicationQuery applicationQuery = AppKeyDataToRunningQueryConverter.get(applicationName, appKeyData);
 			if (runningQueries.isRunning(applicationQuery)) {
 				return (E) new DRCRequestError<A>(appKeyData.getAppKeyField() + " " + appKeyData.getAppKeyValue()  + " is currently being processed.  Please submit another " + appKeyData.getAppKeyField() + " for a DRC.");
 			} else {
 				runningQueries.setAsRunning(applicationQuery);
 			}
-        
-			System.out.println("timestamp --> start processing the request for requestId: " + drcRequest.getRequestId() + ": " + ERMTime.getTime());
-			drcRequest.setResponseId(drcDao.getResponseId());
-			drcResponse = (E) drcRequestProducer.processRequest(drcRequest, appKeyData);
+			try {
+				System.out.println("timestamp --> start processing the request for requestId: " + drcRequest.getRequestId() + ": " + ERMTime.getTime());
+				drcRequest.setResponseId(drcDao.getResponseId());
+				drcResponse = (E) drcRequestProducer.processRequest(drcRequest, appKeyData);
+				System.out.println("timestamp --> finish processing the request for requestId/responseId: " + drcRequest.getRequestId() + "/" + drcRequest.getResponseId() + ": " + ERMTime.getTime());
+			} finally {
+				runningQueries.remove(applicationQuery);
+			}
+			
 
-			System.out.println("timestamp --> finish processing the request for requestId/responseId: " + drcRequest.getRequestId() + "/" + drcRequest.getResponseId() + ": " + ERMTime.getTime());
-        
-			//remove the running titleListId from the runningList
-			System.out.println("removing appKeyValue: " + appKeyData.getAppKeyValue());
-			runningQueries.remove(applicationQuery);
 		}
 		
         return drcResponse;
