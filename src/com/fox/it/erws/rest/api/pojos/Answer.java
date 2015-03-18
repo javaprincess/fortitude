@@ -1,7 +1,6 @@
 package com.fox.it.erws.rest.api.pojos;
 
 import java.io.Serializable;
-import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.Date;
 
