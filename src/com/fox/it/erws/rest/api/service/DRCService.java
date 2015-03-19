@@ -31,11 +31,10 @@ import com.fox.it.erws.rest.api.validation.AppKeyAccumulatorVisitor;
 import com.fox.it.erws.rest.api.validation.AskType;
 import com.fox.it.erws.rest.api.validation.ERWSValidator;
 import com.fox.it.erws.rest.api.validation.ValidationResponse;
-import com.wordnik.swagger.annotations.Api;
+
 
 
 @Controller
-@Api(value = "/drc", description = "make a request for access the DRC resource and its service layer with a valid access token")
 public class DRCService<T extends MTL, A extends Answer, R extends DRCResponse<A>> {
 
 	@Autowired
