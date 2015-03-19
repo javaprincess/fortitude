@@ -17,7 +17,6 @@ public class ObjectGraphValidatorFactory {
 	}
 	
 	public ObjectGraphValidator getInstance(AppControlParamRequiredFields a, AskType askType) {
-		String fieldName = a.getWebServiceRequiredFieldName();
 		if (askType==null) return null;
 		if ( (a.isBase() == true) &&
 				( askType == AskType.DRC_CHECK) )
