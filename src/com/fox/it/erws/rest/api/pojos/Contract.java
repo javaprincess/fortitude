@@ -26,6 +26,8 @@ public class Contract implements Serializable {
 	@Size(max=20)
 	private Long titleListId;
 	
+	private String withinThroughoutFlag;	
+	
 	private Collection<Title> titles;
 	
 	public Contract() {
@@ -75,6 +77,15 @@ public class Contract implements Serializable {
 		    
 		 return result.toString();
 	}
+	
+	
+	public String getWithinThroughoutFlag() {
+		return withinThroughoutFlag;
+	}
+	public void setWithinThroughoutFlag(String withinThroughoutFlag) {
+		this.withinThroughoutFlag = withinThroughoutFlag;
+	}
+	
 	public Long getTitleListId() {
 		return titleListId;
 	}
