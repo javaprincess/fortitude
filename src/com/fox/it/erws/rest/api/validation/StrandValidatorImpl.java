@@ -52,7 +52,6 @@ public class StrandValidatorImpl extends ObjectGraphValidator {
 
 				Object value = exp4.getValue(strandContext, Object.class);
 				if ((controlParamObj.isMlt() == true)) {
-					System.out.println("strandValue: " + value);
 					if (!isMltValid(controlParamObj, (Long)value)) {
 						String message = getDetailMessage(controlParamObj.getWebServiceRequiredFieldName(), value,controlParamObj.getMltErrorMessage());
 						validationResponse.setErrorMessage(message);
@@ -62,7 +61,6 @@ public class StrandValidatorImpl extends ObjectGraphValidator {
 				}
 				
 				if (value == null) {
-					System.out.println(controlParamObj.getRequiredErrorMessage());
 					validationResponse.setErrorMessage(controlParamObj.getRequiredErrorMessage());
 					break;
 				} else {

@@ -23,13 +23,12 @@ public  class AskType2Impl extends ObjectGraphValidator {
 		
 		Object value = exp4.getValue(askType2RequestContext, Object.class);
 		
-		if (value == null) {
-			System.out.println(controlParamObj.getRequiredErrorMessage());
+		if (value == null||
+		   (value instanceof String && ((String)value).trim().isEmpty())) {
 			validationResponse.setErrorMessage(controlParamObj.getRequiredErrorMessage());
 			return validationResponse;
 			
 		} else {
-			System.out.println("value: " + value.toString());
 			nodeVisitor.visit(controlParamObj, value);
 			//make sure timestamp is not some time in the future.
 			//if we don't do this then if an app asks for an isRightsRequiredCheck

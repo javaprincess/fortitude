@@ -29,8 +29,9 @@ public class TitleValidatorImpl extends ObjectGraphValidator {
 			Object value = exp4.getValue(titleContext, Object.class);
 			
 			
-			if (value == null) {
-				System.out.println(controlParamObj.getRequiredErrorMessage());
+			if (value == null ||
+			   (value instanceof String && ((String)value).trim().isEmpty())) {
+				validationResponse.setErrorMessage(controlParamObj.getRequiredErrorMessage()); 
 				validationResponse.setErrorMessage(controlParamObj.getRequiredErrorMessage());
 				break;
 			} else {
