@@ -307,6 +307,7 @@ public class  DRCDaoImpl implements DRCDao {
 			sql.append(" and isAskType2 = 1");
 		}
 			
+		sql.append(" order by CHECK_ORDER");
 		appControlParamRequiredFieldsList = eM.createNativeQuery(sql.toString(), AppControlParamRequiredFields.class)
 				.setHint("javax.persistence.cache.storeMode", CacheStoreMode.BYPASS)
 				.getResultList();
