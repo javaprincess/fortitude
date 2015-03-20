@@ -37,7 +37,8 @@
                 <property name="jndiName" value="jdbc/ERMDS"/>  
     </bean>
     
-     
+
+<!--      
 	<bean id="springDataSource"
          class="org.springframework.jdbc.datasource.DriverManagerDataSource">
                 <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
@@ -45,6 +46,7 @@
                 <property name="username" value="erm" />
                 <property name="password" value="TiK4eRm_3" />
         </bean>
+ -->        
 
      
     <bean id="drcRequestProducer" 
