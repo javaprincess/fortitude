@@ -12,6 +12,7 @@ import com.fox.it.erws.rest.api.dao.DRCDaoImpl;
 import com.fox.it.erws.rest.api.model.drc.DRCRequest;
 import com.fox.it.erws.rest.api.model.drc.response.ProductAnswer;
 import com.fox.it.erws.rest.api.pojos.ConsumingApplicationPOJO;
+import com.fox.it.erws.rest.api.pojos.Contract;
 import com.fox.it.erws.rest.api.pojos.Title;
 import com.fox.it.erws.rest.api.service.ERWSException;
 import com.fox.it.erws.rest.api.util.ERMTime;
@@ -41,14 +42,29 @@ public class DRCProcBean {
 	 
 	 private String getWithinThroughoutFlag(Collection<Title> titleCollection) {
 		 for (Title t: titleCollection) {
-			 return t.getWithinThroughoutFlag();
+			 String flag = t.getWithinThroughoutFlag(); 
+			 if (flag!=null && !flag.trim().isEmpty()) {
+				 return flag;
+			 }
 		 }
 		 return null;
 	 }
 	 
+	 private String getWithinThroughoutFlag(DRCRequest drcRequest) {
+		 Contract contract = drcRequest.getContract();
+		 if (contract.getWithinThroughoutFlag()!=null && !contract.getWithinThroughoutFlag().trim().isEmpty()) {
+			 return contract.getWithinThroughoutFlag().trim();
+		 }
+		 return getWithinThroughoutFlag(contract.getTitles());
+
+	 }
+	 
 	 private void doDrc(DRCRequest drcRequest,Long appKeyValue) {
 		   //withinThroughoutFlag is at the title level.  There is a collection of titles per contract
-		   String withinThroughoutFlag = getWithinThroughoutFlag(drcRequest.getContract().getTitles());
+		   String withinThroughoutFlag = getWithinThroughoutFlag(drcRequest);
+		   if (withinThroughoutFlag==null||withinThroughoutFlag.isEmpty()) {
+			   withinThroughoutFlag = null;			   
+		   }
 		   drcDao.rightsCheck(appKeyValue, 
 				   			  withinThroughoutFlag, 
 				   			  drcRequest.getConsumingApplicationName());
@@ -73,7 +89,6 @@ public class DRCProcBean {
 		    prepareDRCCheck(drcRequest.getConsumingApplicationName(), appKeyData);
 		    saveQuery(drcRequest);
         	
-		    System.out.println("timestamp --> start rightsCheck for requestId/responseId: " + drcRequest.getRequestId() + "/" + drcRequest.getResponseId() + " : " + ERMTime.getTime());
 		    doDrc(drcRequest, applicationValue);
 		    
 		    //TODO implement
